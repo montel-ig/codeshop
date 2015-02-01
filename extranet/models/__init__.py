@@ -1,2 +1,2 @@
 from .customer import Customer, Need
-from .github import Issue
+from .gh_issues import Organization, Repository, Issue
