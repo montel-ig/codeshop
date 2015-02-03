@@ -91,6 +91,7 @@ class Issue(Syncable):
     estimated_hours = models.DecimalField(max_digits=3, decimal_places=1,
                                           blank=True, null=True)
     estimated_on = models.DateField(null=True, blank=True)
+    work_initiated_at = models.DateTimeField(null=True, blank=True)
 
     def _sync_data(self, d):
         for attr in ['title', 'created_at', 'closed_at', 'html_url']:

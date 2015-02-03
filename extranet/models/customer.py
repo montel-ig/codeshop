@@ -14,3 +14,5 @@ class Need(models.Model, Mixin):
     customer = models.ForeignKey(Customer)
     name = models.CharField(max_length=200)
     is_estimate_requested = models.BooleanField(default=False)
+    estimate_finished_at = models.DateTimeField(null=True, default=None)
+    estimate_approved_at = models.DateTimeField(null=True, default=None)
