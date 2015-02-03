@@ -1,3 +1,4 @@
+from django.contrib.auth.models import Group
 from django.db import models
 
 
@@ -6,12 +7,8 @@ class Mixin(object):
         return self.name
 
 
-class Customer(models.Model, Mixin):
-    name = models.CharField(max_length=100)
-
-
 class Need(models.Model, Mixin):
-    customer = models.ForeignKey(Customer)
+    customer = models.ForeignKey(Group)
     name = models.CharField(max_length=200)
     is_estimate_requested = models.BooleanField(default=False)
     estimate_finished_at = models.DateTimeField(null=True, default=None)
