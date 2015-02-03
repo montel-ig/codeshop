@@ -39,6 +39,9 @@ class Organization(models.Model):
     # github fields
     login = models.CharField(max_length=100)
 
+    class Meta:
+        verbose_name = 'Github organization'
+
     def repositories_string(self):
         return u', '.join(x.name for x in self.repository_set.all())
 
@@ -52,7 +55,8 @@ class Repository(Syncable):
     name = models.CharField(max_length=100)
 
     class Meta:
-        verbose_name_plural = 'repositories'
+        verbose_name = 'Github repository'
+        verbose_name_plural = 'Github repositories'
 
     def get_distinct_name(self):
         return u'{self.organization.login}/{self.name}'.format(self=self)

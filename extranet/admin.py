@@ -29,12 +29,19 @@ admin.site.register(Group, GroupAdmin)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = (u'login', u'repositories_string')
 
+    def get_readonly_fields(self, request, obj=None):
+        return (u'login',) if obj else tuple()
+
 
 @admin.register(Repository)
 class RepositoryAdmin(admin.ModelAdmin):
     list_display = (u'name', u'synced_at', u'latest_created_issue',
                     u'latest_updated_issue', u'latest_closed_issue')
     actions = ['sync']
+
+    def get_readonly_fields(self, request, obj=None):
+        fields = (u'synced_at',)
+        return (u'organization', u'name') + fields if obj else fields
 
     def sync(self, request, queryset):
         for repo in queryset:
