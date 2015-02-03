@@ -98,3 +98,6 @@ class Issue(Syncable):
             setattr(self, attr, getattr(d, attr))
         self._update_sync_timestamp(save=False)
         self.save()
+
+    def __unicode__(self):
+        return self.title

@@ -1,3 +1,5 @@
 django>=1.7
 django-extensions
 PyGithub
+pyyaml
+
