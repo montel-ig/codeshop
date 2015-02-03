@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 
     'django_extensions',
+    'social_auth',
 
     'extranet',
 )
@@ -85,3 +86,22 @@ USE_TZ = False
 # https://docs.djangoproject.com/en/1.7/howto/static-files/
 
 STATIC_URL = '/static/'
+
+
+# === social auth tweaks ===
+AUTHENTICATION_BACKENDS = (
+    'social_auth.backends.google.GoogleBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+GOOGLE_DISPLAY_NAME = 'codeshop'
+LOGIN_URL          = '/login/'
+LOGIN_REDIRECT_URL = '/'
+LOGIN_ERROR_URL    = '/login-error/'
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+  'django.contrib.auth.context_processors.auth',
+  'social_auth.context_processors.social_auth_by_type_backends',
+)
+
+SOCIAL_AUTH_ENABLED_BACKENDS = ('google')
+SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
