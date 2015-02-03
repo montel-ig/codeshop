@@ -17,7 +17,7 @@ def _github():
 
 
 class Syncable(models.Model):
-    synced_at = models.DateTimeField(null=True)
+    synced_at = models.DateTimeField(null=True, blank=True)
 
     def _update_sync_timestamp(self, save=True):
         '''
@@ -39,6 +39,9 @@ class Organization(models.Model):
     # github fields
     login = models.CharField(max_length=100)
 
+    def repositories_string(self):
+        return u', '.join(x.name for x in self.repository_set.all())
+
     def __unicode__(self):
         return self.login
 
@@ -47,6 +50,9 @@ class Repository(Syncable):
     # github fields
     organization = models.ForeignKey(Organization)
     name = models.CharField(max_length=100)
+
+    class Meta:
+        verbose_name_plural = 'repositories'
 
     def get_distinct_name(self):
         return u'{self.organization.login}/{self.name}'.format(self=self)
@@ -73,6 +79,15 @@ class Repository(Syncable):
         self._update_sync_timestamp(save=False)
         self.save()
 
+    def latest_created_issue(self):
+        return self.issue_set.all().order_by('-created_at').first()
+
+    def latest_updated_issue(self):
+        return self.issue_set.all().order_by('-updated_at').first()
+
+    def latest_closed_issue(self):
+        return self.issue_set.all().order_by('-closed_at').first()
+
     def __unicode__(self):
         return self.get_distinct_name()
 
@@ -83,6 +98,7 @@ class Issue(Syncable):
     number = models.IntegerField()
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(null=True)
+    updated_at = models.DateTimeField(null=True)
     closed_at = models.DateTimeField(null=True)
     html_url = models.URLField(null=True)
 
@@ -94,7 +110,9 @@ class Issue(Syncable):
     work_initiated_at = models.DateTimeField(null=True, blank=True)
 
     def _sync_data(self, d):
-        for attr in ['title', 'created_at', 'closed_at', 'html_url']:
+        FIELDS = ['title', 'created_at', u'updated_at', 'closed_at',
+                  'html_url']
+        for attr in FIELDS:
             setattr(self, attr, getattr(d, attr))
         self._update_sync_timestamp(save=False)
         self.save()
