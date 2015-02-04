@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
-from models import Project, Organization, Repository
+from models import Project, Need, Organization, Repository, Issue
 
 
 # === patch & reload User/UserAdmin ===
@@ -59,6 +59,17 @@ class RepositoryAdmin(admin.ModelAdmin):
     sync.short_description = "Sync local issues with Github"
 
 
+@admin.register(Issue)
+class IssueAdmin(admin.ModelAdmin):
+    list_display = (u'repository', u'number', u'title', u'created_at',
+                    u'closed_at', u'need')
+
+
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = (u'name', u'customer_team', u'coder_team')
+    list_display = (u'name', u'customer_team', u'coder_team', u'latest_need')
+
+
+@admin.register(Need)
+class NeedAdmin(admin.ModelAdmin):
+    list_display = (u'customer', u'name', u'created_at')

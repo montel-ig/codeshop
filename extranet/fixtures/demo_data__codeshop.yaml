@@ -1,74 +1,116 @@
-- fields: {name: Demo customer}
+- fields:
+    name: Codeshop Admins
+    permissions: []
   model: auth.group
   pk: 1
-- fields: {customer: 1, estimate_approved_at: null, estimate_finished_at: null, is_estimate_requested: true,
-    name: Sketch db model.}
+- fields:
+    name: Codeshop Devs
+    permissions: []
+  model: auth.group
+  pk: 2
+- fields: {coder_team: 2, customer_team: 1, name: Codeshop Dev Project}
+  model: extranet.project
+  pk: 1
+- fields: {created_at: !!timestamp '2015-02-04 19:34:04.241499', customer: 1, estimate_approved_at: null,
+    estimate_finished_at: null, is_estimate_requested: false, name: 'For a newcomer,
+      it should be straight-forward to test the codeshop functionalities'}
   model: extranet.need
   pk: 1
 - fields: {login: zenbum}
   model: extranet.organization
   pk: 1
-- fields: {name: codeshop, organization: 1, synced_at: !!timestamp '2015-02-02 10:15:35.467717'}
+- fields: {name: codeshop, organization: 1, synced_at: !!timestamp '2015-02-03 19:29:19.170843'}
   model: extranet.repository
   pk: 1
-- fields: {closed_at: null, created_at: !!timestamp '2015-02-03 10:01:30', estimated_hours: null,
-    estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/7', need: null,
-    number: 7, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:34.634783',
-    title: 'There should be some test data easily available, to help testing out the
-      app.', work_initiated_at: null}
+- fields: {closed_at: null, created_at: !!timestamp '2015-02-04 08:55:19', estimated_hours: null,
+    estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/13',
+    need: 1, number: 13, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:17',
+    title: 'There should be a working fixtures file, for trying out the app.', updated_at: !!timestamp '2015-02-04
+      08:55:19', work_initiated_at: null}
   model: extranet.issue
   pk: 1
-- fields: {closed_at: null, created_at: !!timestamp '2015-02-03 09:56:48', estimated_hours: null,
-    estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/6', need: 1,
-    number: 6, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:34.761053',
-    title: 'There should be a "workflow" for finishing estimates, approving estimates,
-      and starting the actual work.', work_initiated_at: null}
+- fields: {closed_at: null, created_at: !!timestamp '2015-02-04 07:44:10', estimated_hours: null,
+    estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/12',
+    need: null, number: 12, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.072813',
+    title: There should be a visual overview of all the coder's projects., updated_at: !!timestamp '2015-02-04
+      07:44:10', work_initiated_at: null}
   model: extranet.issue
   pk: 2
-- fields: {closed_at: !!timestamp '2015-02-01 20:21:30', created_at: !!timestamp '2015-02-01
-      11:33:55', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/5',
-    need: 1, number: 5, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:34.881487',
-    title: There should be a way to sync github issues to the (local) extranet db.,
+- fields: {closed_at: !!timestamp '2015-02-04 07:10:59', created_at: !!timestamp '2015-02-04
+      06:31:38', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/11',
+    need: null, number: 11, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.149648',
+    title: There should be Coders., updated_at: !!timestamp '2015-02-04 07:10:59',
     work_initiated_at: null}
   model: extranet.issue
   pk: 3
-- fields: {closed_at: !!timestamp '2015-02-01 11:27:41', created_at: !!timestamp '2015-02-01
-      11:12:24', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/4',
-    need: 1, number: 4, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:35.006820',
-    title: There should be a way to divide customer's Needs to a bunch of separate
-      tickets/issues., work_initiated_at: null}
+- fields: {closed_at: !!timestamp '2015-02-03 18:36:22', created_at: !!timestamp '2015-02-03
+      18:00:10', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/10',
+    need: null, number: 10, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.246899',
+    title: One should be able to add/link github repositories via the admin GUI.,
+    updated_at: !!timestamp '2015-02-03 18:36:22', work_initiated_at: null}
   model: extranet.issue
   pk: 4
-- fields: {closed_at: !!timestamp '2015-02-01 11:08:36', created_at: !!timestamp '2015-02-01
-      10:44:47', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/3',
-    need: 1, number: 3, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:35.147323',
-    title: A Customer should be able to request estimates for a given Need., work_initiated_at: null}
+- fields: {closed_at: !!timestamp '2015-02-03 12:18:42', created_at: !!timestamp '2015-02-03
+      11:44:00', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/9',
+    need: null, number: 9, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.352489',
+    title: There should be a way to log in to the site., updated_at: !!timestamp '2015-02-03
+      12:18:42', work_initiated_at: null}
   model: extranet.issue
   pk: 5
-- fields: {closed_at: !!timestamp '2015-02-01 07:28:17', created_at: !!timestamp '2015-02-01
-      07:17:05', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/2',
-    need: 1, number: 2, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:35.259624',
-    title: There should be a way to put into words what the customer needs., work_initiated_at: null}
+- fields: {closed_at: !!timestamp '2015-02-03 11:31:17', created_at: !!timestamp '2015-02-03
+      10:36:22', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/8',
+    need: null, number: 8, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.456109',
+    title: There should be an admin GUI for managing customers., updated_at: !!timestamp '2015-02-03
+      11:31:40', work_initiated_at: null}
   model: extranet.issue
   pk: 6
-- fields: {closed_at: !!timestamp '2015-02-01 07:07:40', created_at: !!timestamp '2015-02-01
-      06:52:15', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/1',
-    need: 1, number: 1, repository: 1, synced_at: !!timestamp '2015-02-02 10:15:35.420217',
-    title: There should be customers., work_initiated_at: null}
+- fields: {closed_at: !!timestamp '2015-02-03 10:29:27', created_at: !!timestamp '2015-02-03
+      10:01:30', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/7',
+    need: null, number: 7, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.567339',
+    title: 'There should be some test data easily available, to help testing out the
+      app.', updated_at: !!timestamp '2015-02-03 10:29:27', work_initiated_at: null}
   model: extranet.issue
   pk: 7
-- fields:
-    date_joined: 2015-02-03 11:17:13.577400
-    email: ''
-    first_name: ''
-    groups: [1]
-    is_active: true
-    is_staff: false
-    is_superuser: false
-    last_login: 2015-02-03 11:17:13.577274
-    last_name: ''
-    password: pbkdf2_sha256$15000$cO9e8PA1lWMV$q0r7twizMJ/LTWKtoepchJ8ntesGr49nuxnE2Ws65Lg=
-    user_permissions: []
-    username: demo
-  model: auth.user
-  pk: 1
+- fields: {closed_at: !!timestamp '2015-02-03 10:29:27', created_at: !!timestamp '2015-02-03
+      09:56:48', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/6',
+    need: null, number: 6, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.702138',
+    title: 'There should be a "workflow" for finishing estimates, approving estimates,
+      and starting the actual work.', updated_at: !!timestamp '2015-02-03 10:29:27',
+    work_initiated_at: null}
+  model: extranet.issue
+  pk: 8
+- fields: {closed_at: !!timestamp '2015-02-01 20:21:30', created_at: !!timestamp '2015-02-01
+      11:33:55', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/5',
+    need: null, number: 5, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.791602',
+    title: There should be a way to sync github issues to the (local) extranet db.,
+    updated_at: !!timestamp '2015-02-01 20:21:30', work_initiated_at: null}
+  model: extranet.issue
+  pk: 9
+- fields: {closed_at: !!timestamp '2015-02-01 11:27:41', created_at: !!timestamp '2015-02-01
+      11:12:24', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/4',
+    need: null, number: 4, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.876654',
+    title: There should be a way to divide customer's Needs to a bunch of separate
+      tickets/issues., updated_at: !!timestamp '2015-02-01 11:27:41', work_initiated_at: null}
+  model: extranet.issue
+  pk: 10
+- fields: {closed_at: !!timestamp '2015-02-01 11:08:36', created_at: !!timestamp '2015-02-01
+      10:44:47', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/3',
+    need: null, number: 3, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:18.939925',
+    title: A Customer should be able to request estimates for a given Need., updated_at: !!timestamp '2015-02-01
+      11:08:36', work_initiated_at: null}
+  model: extranet.issue
+  pk: 11
+- fields: {closed_at: !!timestamp '2015-02-01 07:28:17', created_at: !!timestamp '2015-02-01
+      07:17:05', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/2',
+    need: null, number: 2, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:19.037180',
+    title: There should be a way to put into words what the customer needs., updated_at: !!timestamp '2015-02-01
+      07:28:17', work_initiated_at: null}
+  model: extranet.issue
+  pk: 12
+- fields: {closed_at: !!timestamp '2015-02-01 07:07:40', created_at: !!timestamp '2015-02-01
+      06:52:15', estimated_hours: null, estimated_on: null, html_url: 'https://github.com/zenbum/codeshop/issues/1',
+    need: null, number: 1, repository: 1, synced_at: !!timestamp '2015-02-03 19:29:19.134214',
+    title: There should be customers., updated_at: !!timestamp '2015-02-01 07:07:40',
+    work_initiated_at: null}
+  model: extranet.issue
+  pk: 13

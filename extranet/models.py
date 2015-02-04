@@ -10,6 +10,7 @@ from github import Github
 
 
 # === models for representing customer projects ===
+
 class Nameable(models.Model):
     name = models.CharField(max_length=200)
 
@@ -24,12 +25,18 @@ class Project(Nameable):
     customer_team = models.ForeignKey(Group, related_name='code_projects')
     coder_team = models.ForeignKey(Group, related_name='customer_projects')
 
+    def latest_need(self):
+        return self.need_set.order_by('-created_at').first()
+
 
 class Need(Nameable):
     customer = models.ForeignKey(Project)
+    created_at = models.DateTimeField(auto_now_add=True)
     is_estimate_requested = models.BooleanField(default=False)
-    estimate_finished_at = models.DateTimeField(null=True, default=None)
-    estimate_approved_at = models.DateTimeField(null=True, default=None)
+    estimate_finished_at = models.DateTimeField(null=True, blank=True,
+                                                default=None)
+    estimate_approved_at = models.DateTimeField(null=True, blank=True,
+                                                default=None)
 
 
 # === github models ===
@@ -126,7 +133,7 @@ class Issue(Syncable):
     title = models.CharField(max_length=200)
     created_at = models.DateTimeField(null=True)
     updated_at = models.DateTimeField(null=True)
-    closed_at = models.DateTimeField(null=True)
+    closed_at = models.DateTimeField(null=True, blank=True)
     html_url = models.URLField(null=True)
 
     # non-github fields
