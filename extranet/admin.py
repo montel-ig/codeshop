@@ -2,29 +2,39 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
-from models import Organization, Repository
+from models import Project, Organization, Repository
 
 
 # === patch & reload User/UserAdmin ===
-User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
-User.user_info = lambda self: u'{x.username} <{x.email}>'.format(x=self)
 
-UserAdmin.list_display = (u'user_info', 'groups_string', 'is_staff')
+User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
+User.user_info = lambda x: u'<{}>'.format(x.email) if x.email else x.username
+
+UserAdmin.list_display = (u'user_info', u'groups_string', u'is_staff')
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 
 
 # === patch & reload Group/GroupAdmin ===
-Group.users_string = lambda self: u', '.join(x.user_info()
-                                             for x in self.user_set.all())
-GroupAdmin.list_display = (u'name', 'users_string')
+
+Group.users_string = \
+    lambda self: u', '.join(x.user_info() for x in self.user_set.all())
+Group.customer_projects_string = \
+    lambda self: u', '.join(map(unicode, self.customer_projects.all()))
+Group.code_projects_string = \
+    lambda self: u', '.join(map(unicode, self.code_projects.all()))
+
+GroupAdmin.list_display = \
+    (u'name', u'users_string', u'customer_projects_string',
+     u'code_projects_string')
 
 admin.site.unregister(Group)
 admin.site.register(Group, GroupAdmin)
 
 
 # === extranet models ===
+
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
     list_display = (u'login', u'repositories_string')
@@ -47,3 +57,8 @@ class RepositoryAdmin(admin.ModelAdmin):
         for repo in queryset:
             repo._sync()
     sync.short_description = "Sync local issues with Github"
+
+
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = (u'name', u'customer_team', u'coder_team')
