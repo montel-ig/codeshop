@@ -84,7 +84,7 @@ class Syncable(models.Model):
             self.save()
 
 
-class Organization(models.Model):
+class Organization(models.Model, HoursReporter):
     # github fields
     login = models.CharField(max_length=100)
 
