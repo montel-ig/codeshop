@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
-from models import Project, Need, Organization, Repository, Issue
+from models import Project, Need, Organization, Repository, Issue, Hours
 
 
 # === patch & reload User/UserAdmin ===
@@ -37,7 +37,7 @@ admin.site.register(Group, GroupAdmin)
 
 @admin.register(Organization)
 class OrganizationAdmin(admin.ModelAdmin):
-    list_display = (u'login', u'repositories_string')
+    list_display = (u'login', u'repositories_string', u'total_hours')
 
     def get_readonly_fields(self, request, obj=None):
         return (u'login',) if obj else tuple()
@@ -46,7 +46,8 @@ class OrganizationAdmin(admin.ModelAdmin):
 @admin.register(Repository)
 class RepositoryAdmin(admin.ModelAdmin):
     list_display = (u'name', u'synced_at', u'latest_created_issue',
-                    u'latest_updated_issue', u'latest_closed_issue')
+                    u'latest_updated_issue', u'latest_closed_issue',
+                    u'total_hours')
     actions = ['sync']
 
     def get_readonly_fields(self, request, obj=None):
@@ -62,14 +63,21 @@ class RepositoryAdmin(admin.ModelAdmin):
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
     list_display = (u'repository', u'number', u'title', u'created_at',
-                    u'closed_at', u'need')
+                    u'closed_at', u'need', u'total_hours')
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
-    list_display = (u'name', u'customer_team', u'coder_team', u'latest_need')
+    list_display = (u'name', u'customer_team', u'coder_team', u'latest_need',
+                    u'total_hours')
 
 
 @admin.register(Need)
 class NeedAdmin(admin.ModelAdmin):
-    list_display = (u'customer', u'name', u'created_at')
+    list_display = (u'customer', u'name', u'created_at', u'total_hours')
+
+
+@admin.register(Hours)
+class HoursAdmin(admin.ModelAdmin):
+    list_display = (u'customer', u'date', u'amount', u'coder', u'issue',
+                    u'comment')
