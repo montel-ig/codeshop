@@ -32,9 +32,10 @@ SECRET_KEY = 't%npqx^5_0!tp4cd3vd1(r5yyguh)ins*iy5$_@0z*ld-n=ju-'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True if (custom('DEBUG') in [None, True]) else False
 
-TEMPLATE_DEBUG = True
+ALLOWED_HOSTS = custom('ALLOWED_HOSTS') or []
+ADMINS = custom('ADMINS') or []
 
-ALLOWED_HOSTS = []
+TEMPLATE_DEBUG = True
 
 
 # Application definition
