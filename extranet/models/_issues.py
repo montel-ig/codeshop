@@ -2,6 +2,7 @@
 from datetime import datetime, timedelta
 
 # django
+from django.conf import settings
 from django.db import models
 
 # 3rd party
@@ -15,7 +16,7 @@ from .utils import HoursReporter
 # === utils ===
 
 def _github():
-    token = open('github-access-token.txt').read().strip()
+    token = open(settings.GITHUB_ACCESS_TOKEN).read().strip()
     return Github(token)
 
 

@@ -8,6 +8,16 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
 
+
+# === util for getting custom settings ===
+def custom(key):
+    try:
+        custom = __import__('custom_settings')
+        return getattr(custom, key)
+    except:
+        return None
+
+
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -90,18 +100,25 @@ STATIC_URL = '/static/'
 
 # === social auth tweaks ===
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.google.GoogleBackend',
+    'social_auth.backends.google.GoogleOAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
 )
-GOOGLE_DISPLAY_NAME = 'codeshop'
-LOGIN_URL          = '/login/'
+
+GOOGLE_OAUTH2_CLIENT_ID = custom('GOOGLE_OAUTH2_CLIENT_ID')
+GOOGLE_OAUTH2_CLIENT_SECRET = custom('GOOGLE_OAUTH2_CLIENT_SECRET')
+
+LOGIN_URL = '/login/'
 LOGIN_REDIRECT_URL = '/'
-LOGIN_ERROR_URL    = '/login-error/'
+LOGIN_ERROR_URL = '/login-error/'
 
 TEMPLATE_CONTEXT_PROCESSORS = (
-  'django.contrib.auth.context_processors.auth',
-  'social_auth.context_processors.social_auth_by_type_backends',
+    'django.contrib.auth.context_processors.auth',
+    'social_auth.context_processors.social_auth_by_type_backends',
 )
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google')
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
+
+
+# === GITHUB ===
+GITHUB_ACCESS_TOKEN = custom('GITHUB_ACCESS_TOKEN')
