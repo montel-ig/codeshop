@@ -2,15 +2,18 @@ from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
-from models import Project, Need, Organization, Repository, Issue, Hours
+from models import (Project, Need, Organization, Repository, Issue, Hours,
+                    HourTag)
 
 
 # === patch & reload User/UserAdmin ===
 
 User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
 User.user_info = lambda x: u'<{}>'.format(x.email) if x.email else x.username
+User.user_hours = lambda x: sum(h.amount for h in x.hours_set.all())
 
-UserAdmin.list_display = (u'user_info', u'groups_string', u'is_staff')
+UserAdmin.list_display = (u'user_info', u'user_hours', u'groups_string',
+                          u'is_staff')
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
@@ -45,9 +48,9 @@ class OrganizationAdmin(admin.ModelAdmin):
 
 @admin.register(Repository)
 class RepositoryAdmin(admin.ModelAdmin):
-    list_display = (u'name', u'synced_at', u'latest_created_issue',
-                    u'latest_updated_issue', u'latest_closed_issue',
-                    u'total_hours')
+    list_display = (u'name', u'default_project', u'synced_at',
+                    u'latest_created_issue', u'latest_updated_issue',
+                    u'latest_closed_issue', u'total_hours')
     actions = ['sync']
 
     def get_readonly_fields(self, request, obj=None):
@@ -62,22 +65,30 @@ class RepositoryAdmin(admin.ModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
-    list_display = (u'repository', u'number', u'title', u'created_at',
-                    u'closed_at', u'need', u'total_hours')
+    list_display = (u'repository', u'number', u'need', u'title', u'created_at',
+                    u'closed_at', u'total_hours')
+    list_filter = (u'repository',)
 
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
     list_display = (u'name', u'customer_team', u'coder_team', u'latest_need',
-                    u'total_hours')
+                    u'repositories_string', u'total_hours')
 
 
 @admin.register(Need)
 class NeedAdmin(admin.ModelAdmin):
-    list_display = (u'customer', u'name', u'created_at', u'total_hours')
+    list_display = (u'project', u'name', u'created_at', u'total_hours')
+
+
+@admin.register(HourTag)
+class HourTagAdmin(admin.ModelAdmin):
+    list_display = (u'name', u'total_hours',)
 
 
 @admin.register(Hours)
 class HoursAdmin(admin.ModelAdmin):
-    list_display = (u'customer', u'date', u'amount', u'coder', u'issue',
-                    u'comment')
+    list_display = (u'coder', u'project', u'date', u'amount', u'tags_string',
+                    u'get_need', u'repository', u'issue', u'comment',
+                    u'ticket_info')
+    list_filter = (u'coder', u'project')

@@ -1,0 +1,70 @@
+{{ user.email }}
+<hr />
+Total hours: {{ total_hours }}h
+<hr />
+<h3>Upload hours</h3>
+Use the form below to upload your hours.
+<p>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table>
+  {{ form }}
+  <tr><td></td><td>
+  <input name="preview" value="Preview" type="submit" />
+  <input name="submit" type="submit" />
+  </td></tr>
+  </table>
+</form>
+
+<p>
+
+<p>CREATED:</p>
+{% for obj in created_objs %}
+  <span style="color: blue">CREATED: {{ obj.as_scsv }}</span><br />
+{% endfor  %}
+
+<p>FAILED:</p>
+{% for row in failed_rows %}
+  <span style="color: red">FAILED: {{ row }}</span><br />
+{% endfor  %}
+
+<p>VALID:</p>
+{% for obj in valid_objs %}
+  <span style="color: blue">{{ obj.as_scsv }}</span><br />
+{% endfor  %}
+
+<p>
+<hr />
+
+<div style="padding: 2em;">
+Please, use a semicolon-separated CSV, with the following columns:
+<pre style="font-style: italic; background-color: #eee; padding: 2em; margin-left: 2em;">
+<b>project;                          </b>(required, unless github repository is given and has a default project)
+
+<b>date;                             </b>(required)
+<b>start time;                       </b>(optional, but definitely helps detect errors)
+<b>end time                          </b>(optional, but definitely helps detect errors)
+<b>hours amount;                     </b>(required)
+
+<b>comma-separated tags;             </b>(at least one required, please follow your project's guidelines)
+
+<b>github repository;                </b>(optional, but recommended - the organization can be either given or omitted)
+<b>github issue number;              </b>(optional, but recommended - the number sign can be either given or omitted)
+
+<b>comment describing the work;      </b>(required, unless github issue is properly identified)
+</pre>
+<p>
+For example, the following rows are valid inputs:
+<pre style="background-color: #eee; padding: 2em; margin-left: 2em;">
+<b>                     ; 2015-02-06 ; 12:00 ; 15:30 ; 3.5 ; code ; zenbum/codeshop ; #15 ; csv upload    </b>(excellent)
+<b>                     ; 2015-02-06 ; 12:00 ;       ; 3.5 ; code ;        codeshop ;  15 ;               </b>(not bad)
+<b>                     ; 2015-02-06 ;       ;       ; 3.5 ; code ;        codeshop ;     ; csv upload    </b>(not good)
+<b>Codeshop Dev Project ; 2015-02-06 ;       ;       ; 3.5 ; code ;                 ;     ; csv upload    </b>(poor)
+</pre>
+A few more examples:
+<pre style="background-color: #eee; padding: 2em; margin-left: 2em;">
+<b>Customer Project A ; 2015-02-05 ; 09:30 ; 10:00 ; 0.5 ; admin, meeting    ; ; ; meeting with Mrs. X  </b>
+<b>Customer Project B ; 2015-02-05 ; 10:30 ;       ; 2   ; unexpected, alarm ; ; ; maintenance          </b>
+<b>Customer Project A ; 2015-02-05 ; 14:30 ; 16:00 ; 1.5 ; admin, server     ; ; ; server maintenance   </b>
+</pre>
+</div>
