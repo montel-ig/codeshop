@@ -16,8 +16,7 @@ from .utils import HoursReporter
 # === utils ===
 
 def _github():
-    token = open(settings.GITHUB_ACCESS_TOKEN).read().strip()
-    return Github(token)
+    return Github(settings.GITHUB_ACCESS_TOKEN)
 
 
 class Syncable(models.Model):
