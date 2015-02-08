@@ -30,7 +30,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 SECRET_KEY = 't%npqx^5_0!tp4cd3vd1(r5yyguh)ins*iy5$_@0z*ld-n=ju-'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = True if (custom('DEBUG') in [None, True]) else False
 
 TEMPLATE_DEBUG = True
 
@@ -122,3 +122,11 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # === GITHUB ===
 GITHUB_ACCESS_TOKEN = custom('GITHUB_ACCESS_TOKEN')
+
+
+# === EMAIL ===
+EMAIL_HOST = custom('EMAIL_HOST')
+EMAIL_HOST_USER = custom('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = custom('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = custom('DEFAULT_FROM_EMAIL')
+SERVER_EMAIL = custom('SERVER_EMAIL')
