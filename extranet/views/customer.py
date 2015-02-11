@@ -12,7 +12,10 @@ from extranet.models import Project, ProjectReport, MonthlyReport
 def get_customer_project_and_month(func):
     def wrapper(request, project_name, year=None, month=None):
         project = get_object_or_404(Project, name=project_name)
-        if not request.user in project.customer_team.user_set.all():
+        if (
+                not request.user.is_superuser
+                and not request.user in project.customer_team.user_set.all()
+        ):
             raise Http404()
         year = int(year) if year else None
         month = int(month) if month else None
