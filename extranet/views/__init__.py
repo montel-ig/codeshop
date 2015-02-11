@@ -22,11 +22,14 @@ def home(request):
         projects.update(group.code_projects.all())
         if group.customer_projects.all():
             teams.add(group)
-    year, week = date.today().isocalendar()[:2]
+
+    today = date.today()
+    year, week = today.isocalendar()[:2]
     d = dict(
         code_projects=projects,
         teams=teams,
         year=year,
         week=week,
+        month=today.month,
     )
     return render(request, 'extranet/home.html', d)

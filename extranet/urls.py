@@ -9,6 +9,8 @@ urlpatterns = patterns(
     # === coder ===
     url(r'^hours/(.+)/(\d+)/week/(\d+)/$', 'extranet.views.coder.weekly_hours',
         name='extranet_weekly_hours'),
+    url(r'^hours/(.+)/(\d+)/(\d+)/$', 'extranet.views.coder.monthly_hours',
+        name='extranet_monthly_hours'),
     url(r'^hours/(.+)/$', 'extranet.views.coder.upload_hours_as_csv',
         name='extranet_upload_hours_as_csv'),
     url(r'^hours/$', 'extranet.views.coder.upload_hours_as_csv',

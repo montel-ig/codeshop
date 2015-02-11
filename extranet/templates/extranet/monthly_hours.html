@@ -1,0 +1,23 @@
+{% extends "extranet/base.html" %}
+{% load report_tags %}
+{% block content %}
+{{ coder }}
+<div id="weeknav">
+    <span>
+        <a href="{{ monthly.prev_month_url }}">&#10096;</a>
+        <b>{{ monthly.yyyy_mm }}</b>
+        <a href="{{ monthly.next_month_url}}">&#10097;</a>
+    </span>
+</div>
+<h3>
+{{ monthly.coder.username }}
+{% if monthly.coder.email %}
+&lt;{{ monthly.coder.email }}&gt;
+{% endif %}
+</h3>
+{{ monthly.first_date_of_month }} - {{ monthly.last_date_of_month }}
+<p>
+
+{% show_hours_report monthly %}
+
+{% endblock content %}

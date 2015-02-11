@@ -1,5 +1,5 @@
 # python
-from collections import defaultdict
+import calendar
 from datetime import date
 
 # django
@@ -8,8 +8,31 @@ from django.db import models
 
 # this package
 from utils import HoursReporter
-from _issues import Issue
 from _hours import Hours
+
+
+class MonthObjMixin(object):
+    def yyyy_mm(self):
+        return u'{}-{:02d}'.format(self.year, self.month)
+
+    def first_date_of_month(self):
+        return date(self.year, self.month, 1)
+
+    def last_date_of_month(self):
+        last_day = calendar.monthrange(self.year, self.month)[1]
+        return date(self.year, self.month, last_day)
+
+    def prev_month(self):
+        if self.month == 1:
+            return self.year - 1, 12 
+        else:
+            return self.year, self.month - 1
+
+    def next_month(self):
+        if self.month == 12:
+            return self.year + 1, 1
+        else:
+            return self.year, self.month + 1
 
 
 class WeeklyHours(HoursReporter):
@@ -39,13 +62,39 @@ class WeeklyHours(HoursReporter):
             yield hours
 
 
+class MonthlyHours(HoursReporter, MonthObjMixin):
+
+    def __init__(self, coder, year, month):
+        self.coder = coder
+        self.year = year
+        self.month = month
+
+    def prev_month_url(self):
+        year, month = self.prev_month()
+        return reverse('extranet_monthly_hours', args=(self.coder.username,
+                                                       year, month))
+
+    def next_month_url(self):
+        year, month = self.next_month()
+        return reverse('extranet_monthly_hours', args=(self.coder.username,
+                                                       year, month))
+
+    def iter_hours(self):
+        '''
+        Also take a look at HoursReporter.iter_hours and the related functions.
+        '''
+        for hours in self.coder.hours_set.filter(
+                date__year=self.year,
+                date__month=self.month,
+        ):
+            yield hours
 
 
 def month_match(date, month_obj):
     return (date.year, date.month) == (month_obj.year, month_obj.month)
 
 
-class MonthlyReport(HoursReporter):
+class MonthlyReport(HoursReporter, MonthObjMixin):
     def __init__(self, project, year, month):
         self.project = project
         self.year = year
@@ -55,14 +104,11 @@ class MonthlyReport(HoursReporter):
         return u'{:02d}'.format(self.month)
 
     def first_of_this_month(self):
-        return date(self.year, self.month, 1)
+        return self.first_date_of_month()
 
     def first_of_next_month(self):
-        this = self.first_of_this_month()
-        if this.month == 12:
-            return this.replace(year=this.year+1, month=1)
-        else:
-            return this.replace(month=this.month + 1)
+        year, month = self.next_month()
+        return date(year, month, 1)
 
     def iter_hours(self):
         for hours in Hours.objects.filter(date__gte=self.first_of_this_month(),
