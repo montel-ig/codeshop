@@ -4,7 +4,7 @@ from django.conf import settings
 def global_settings(request):
     return dict(
         (key, getattr(settings, key))
-        for key in ['SITE_NAME', 'SITE_OWNER_URL']
+        for key in ['SITE_NAME']
     )
 
 

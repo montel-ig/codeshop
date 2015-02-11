@@ -137,4 +137,3 @@ SERVER_EMAIL = custom('SERVER_EMAIL')
 
 # === GLOBAL SETTINGS ===
 SITE_NAME = custom('SITE_NAME') or 'My Codeshop'
-SITE_OWNER_URL = custom('SITE_OWNER_URL') or 'https://github.com/zenbum/codeshop'
