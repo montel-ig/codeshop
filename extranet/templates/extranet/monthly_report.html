@@ -1,3 +1,7 @@
 {% extends "extranet/base.html" %}
+{% load report_tags %}
 {% block content %}
+
+    {% show_hours_report monthly_report %}
+
 {% endblock content %}

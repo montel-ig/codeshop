@@ -1,0 +1,142 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<!--[if lt IE 7 ]> <html lang="en" class="ie6 ielt8"> <![endif]-->
+<!--[if IE 7 ]>    <html lang="en" class="ie7 ielt8"> <![endif]-->
+<!--[if IE 8 ]>    <html lang="en" class="ie8"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
+<head>
+<meta charset="utf-8">
+<title>{{ SITE_NAME }}</title>
+{% if not user.is_authenticated %}
+  <link rel="stylesheet" type="text/css" href="{% static 'extranet/css/login.css' %}" />
+{% endif %}
+  <link rel="stylesheet" type="text/css" href="{% static 'extranet/css/base.css' %}" />
+</head>
+<body>
+  <div class="container">
+    {% if user.is_authenticated %}
+      <div id="topdefaults">
+        {{ user.email }}
+        <a class="loginlogout" href="{% url 'logout' %}">&#9167; Log out</a><br/>
+        &nbsp;
+      </div>
+    {% endif %}
+    <section id="content">
+
+      {% if user.is_authenticated %}
+
+        <!-- page content-->
+
+        <div id="pagecontent">
+          <div id="navpath">
+              {% if monthly_report %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <a href="{% url 'extranet_monthly_report' monthly_report.project.name %}">{{ monthly_report.project.name }}</a>
+                  &#x27a3;
+                  <span class="currentpage">{{ monthly_report }}</span>
+
+              {% elif project_report %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <span class="currentpage">{{ project_report.project.name }}</span>
+
+              {% elif team %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <span class="currentpage">{{ team.name }}</span>
+
+              {% elif weekly %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <span class="currentpage">Weekly hours</span>
+
+              {% elif coder %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <span class="currentpage">Upload hours CSV</span>
+
+              {% else %}
+
+                  <span class="currentpage">{{ SITE_NAME }}</span>
+
+              {% endif %}
+          </div>
+          <hr />
+          <div id="navbar">
+            {% if monthly_report %}
+
+            {% elif project_report %}
+
+              <span class="navgroup">Months:</span>
+              {% for monthly_report in project_report.iter_months %}
+                <a href="{% url 'extranet_monthly_report' project_report.project.name monthly_report.year monthly_report.two_digit_month %}">{{ monthly_report }}</a>
+              {% endfor %}
+              <br/>
+
+            {% elif team %}
+
+            {% elif weekly %}
+
+            {% elif coder %}
+
+            {% else %}
+
+              <table id="navtable">
+
+              {% if projects_for_customers %}
+                <tr><td class="navgroup">
+                  Projects:
+                </td><td>
+                  {% for project in projects_for_customers %}
+                    <a href="{% url 'extranet_monthly_report' project.name %}">{{ project.name }}</a>
+                  {% endfor %}
+                </td></tr>
+              {% endif %}
+
+              {% if teams_for_coders %}
+                <tr><td class="navgroup">
+                  Hours:
+                </td><td>
+                  <a href="{% url 'extranet_weekly_hours' user.username year week %}">Weekly hours</a>
+                  <a href="{% url 'extranet_upload_hours_as_csv' %}">Upload CSV</a>
+                </td></tr>
+              {% endif %}
+
+              {% if user.is_superuser %}
+                <tr><td class="navgroup">
+                  Admin:
+                </td><td>
+                  <a href="{% url 'admin:index' %}">Index</a>
+                </td></tr>
+              {% endif %}
+
+            </table>
+
+            {% endif %}
+          </div>
+          {% block content %}{% endblock content %}
+        </div>
+
+      {% else %}
+
+        <!-- login form -->
+
+        <div id="login">
+          <h1>{{ SITE_NAME }}</h1>
+          <a class="loginlogout" href="{% url 'socialauth_begin' 'google-oauth2' %}">Log in with Google</a>
+        </div>
+
+      {% endif %}
+    </section>
+    <div id="bottomdefaults">
+      Powered by <a target="_new" href="http://github.com/zenbum/codeshop">http://github.com/zenbum/codeshop</a>
+    </div>
+  </div><!-- container -->
+</body>
+</html>

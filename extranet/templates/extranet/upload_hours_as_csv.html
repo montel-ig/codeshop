@@ -1,11 +1,11 @@
-{{ user.email }}
-<hr />
+{% extends "extranet/base.html" %}
+{% block content %}
 Total hours: {{ total_hours }}h
 <hr />
-<h3>Upload hours</h3>
+<h3>{{ coder }}</h3>
 Use the form below to upload your hours.
 <p>
-<form method="post" enctype="multipart/form-data">
+<form action="{% url 'extranet_upload_hours_as_csv' coder.username %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <table>
   {{ form }}
@@ -18,20 +18,26 @@ Use the form below to upload your hours.
 
 <p>
 
-<p>CREATED:</p>
-{% for obj in created_objs %}
-  <span style="color: blue">CREATED: {{ obj.as_scsv }}</span><br />
-{% endfor  %}
+{% if created_objs %}
+  <p>CREATED:</p>
+  {% for obj in created_objs %}
+    <span style="color: blue">CREATED: {{ obj.as_scsv }}</span><br />
+  {% endfor  %}
+{% endif %}
 
-<p>FAILED:</p>
-{% for row in failed_rows %}
-  <span style="color: red">FAILED: {{ row }}</span><br />
-{% endfor  %}
+{% if failed_rows %}
+  <p>FAILED:</p>
+  {% for row in failed_rows %}
+    <span style="color: red">FAILED: {{ row }}</span><br />
+  {% endfor  %}
+{% endif %}
 
-<p>VALID:</p>
-{% for obj in valid_objs %}
-  <span style="color: blue">{{ obj.as_scsv }}</span><br />
-{% endfor  %}
+{% if valid_objs %}
+  <p>VALID:</p>
+  {% for obj in valid_objs %}
+    <span style="color: blue">{{ obj.as_scsv }}</span><br />
+  {% endfor  %}
+{% endif %}
 
 <p>
 <hr />
@@ -68,3 +74,4 @@ A few more examples:
 <b>Customer Project A ; 2015-02-05 ; 14:30 ; 16:00 ; 1.5 ; admin, server     ; ; ; server maintenance   </b>
 </pre>
 </div>
+{% endblock content %}

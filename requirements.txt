@@ -3,3 +3,4 @@ django-extensions
 PyGithub
 pyyaml
 django-social-auth
+isoweek

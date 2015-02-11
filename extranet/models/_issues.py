@@ -88,7 +88,7 @@ class Repository(Syncable, HoursReporter):
         verbose_name_plural = 'Github repositories'
 
     def __unicode__(self):
-        return self.get_distinct_name()
+        return self.name
 
     def _iter_unsynced_issue_data(self):
         q = dict(state='all')
@@ -158,7 +158,7 @@ class Issue(Syncable, HoursReporter):
         verbose_name = 'Github issue'
 
     def __unicode__(self):
-        return u'{}#{}'.format(self.repository, self.number)
+        return u'{}#{} - {}'.format(self.repository, self.number, self.title)
 
     def _sync_data(self, d):
         FIELDS = ['title', 'created_at', u'updated_at', 'closed_at',

@@ -69,6 +69,15 @@ class IssueAdmin(admin.ModelAdmin):
                     u'closed_at', u'total_hours')
     list_filter = (u'repository',)
 
+    def formfield_for_foreignkey(self, db_field, request, **kwargs):
+        if db_field.name == "need":
+            # sort Needs by project and name in admin
+            # TODO: filter our closed needs
+            kwargs["queryset"] = Need.objects.order_by('project', 'name')
+        return super(IssueAdmin, self).formfield_for_foreignkey(db_field,
+                                                                request,
+                                                                **kwargs)
+
 
 @admin.register(Project)
 class ProjectAdmin(admin.ModelAdmin):
@@ -89,6 +98,5 @@ class HourTagAdmin(admin.ModelAdmin):
 @admin.register(Hours)
 class HoursAdmin(admin.ModelAdmin):
     list_display = (u'coder', u'project', u'date', u'amount', u'tags_string',
-                    u'get_need', u'repository', u'issue', u'comment',
-                    u'ticket_info')
+                    u'issue', u'ticket_info')
     list_filter = (u'coder', u'project')

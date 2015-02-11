@@ -116,6 +116,8 @@ LOGIN_ERROR_URL = '/login-error/'
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
     'social_auth.context_processors.social_auth_by_type_backends',
+    'extranet.context_processors.global_settings',
+    'extranet.context_processors.user_projects_and_teams',
 )
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google')
@@ -132,3 +134,7 @@ EMAIL_HOST_USER = custom('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = custom('EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = custom('DEFAULT_FROM_EMAIL')
 SERVER_EMAIL = custom('SERVER_EMAIL')
+
+# === GLOBAL SETTINGS ===
+SITE_NAME = custom('SITE_NAME') or 'My Codeshop'
+SITE_OWNER_URL = custom('SITE_OWNER_URL') or 'https://github.com/zenbum/codeshop'

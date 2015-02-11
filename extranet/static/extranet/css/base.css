@@ -1,0 +1,138 @@
+/* defaults */
+
+body {
+	background-color: #eee;
+	font: 14px Arial;
+    padding: 35px;
+}
+h1, h2, h3, h4, h5, h6 { 
+	font-family: Helvetica, Arial, sans-serif;
+	color: #7E7E7E;
+}
+a { text-decoration: none; color: #1f77b4; font-weight: bold;}
+a:hover { text-decoration: underline; }
+
+
+/* content */
+
+.container {
+    max-width: 900px;
+	margin: 0 auto 0 auto;
+    padding: 0;
+    
+}
+#content {
+
+    min-height: 500px;
+    background: #f9f9f9;
+	border: 1px solid #c4c6ca;
+    padding: 0;
+}
+.loginlogout, #navbar a, #navpath a, #navpath .currentpage {
+    background-color: #1f77b4;
+    color: white;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+#bottomdefaults {
+    font-size: 10px;
+    float: right;
+}
+#topdefaults {
+    font-weight: bold;
+    text-align: right;
+    font-size: 80%;
+}
+#topdefaults a {
+    text-decoration: none;
+    margin-left: 0.5em;
+}
+#pagecontent {
+    padding: 1em;
+}
+
+tr {
+    line-height: 2em;
+}
+td.navgroup {
+    text-align: right;
+    vertical-align: top; 
+}
+#navtable td a {
+    white-space: nowrap;
+}
+
+#navpath {
+    line-height: 2em;
+}
+#navpath .currentpage {
+    background-color: #ff7f0e;
+    color: black;
+    font-weight: bold;
+}
+
+#report td {
+    padding: 0.2em;
+    color: gray;
+}
+#report td.title {
+    font-style: italic;
+}
+#report .need td {
+    padding-top: 2em;
+}
+#report .issue .hours {
+    padding-left: 1em;
+    text-align: right;
+    vertical-align: top;
+    font-weight: bold;
+    color: gray;
+    white-space: nowrap;
+
+}
+#report .issue .title {
+    padding-left: 1em;
+    line-height: 1em;
+}
+#report .issue .id {
+    border: 1px solid gray;
+    padding: 2px;
+    margin-left: 0.5em;
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    white-space: nowrap;
+    border-radius: 10px;
+}
+#report .issue-closed .id {
+    background-color: #ff7f0e;
+    color: black;
+}
+#report .issue-open .id {
+    background-color: #1f77b4; 
+    color: white;
+}
+#weeknav {
+    margin-top: 1em;
+    text-align: center;
+}
+#weeknav span {
+    display: inline-block;
+    height: 2em;
+    line-height: 2em;
+    border-radius: 2px;
+    border: 1px solid gray;
+    width: auto;
+}
+#weeknav span a {
+    padding-left: 1em;
+    padding-right: 1em;
+    text-decoration: none;
+}
+#weeknav span b {
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    padding-left: 1em;
+    padding-right: 1em;
+}

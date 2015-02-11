@@ -1,5 +1,6 @@
 # django
 from django.contrib.auth.models import Group
+from django.core.urlresolvers import reverse
 from django.db import models
 
 # this package
@@ -14,6 +15,9 @@ class Project(Nameable, HoursReporter):
         for hours in self.hours_set.all():
             yield hours
 
+    def get_customer_url(self):
+        return reverse('extranet_monthly_report', args=[self.name])
+
     def latest_need(self):
         return self.need_set.order_by('-created_at').first()
 
@@ -21,7 +25,8 @@ class Project(Nameable, HoursReporter):
         return u', '.join(x.name for x in self.repository_set.all())
 
 
-class Need(Nameable, HoursReporter):
+class Need(models.Model, HoursReporter):
+    name = models.CharField(max_length=200)
     project = models.ForeignKey(Project)
     created_at = models.DateTimeField(auto_now_add=True)
     is_estimate_requested = models.BooleanField(default=False)
@@ -34,3 +39,6 @@ class Need(Nameable, HoursReporter):
         for issue in self.issue_set.all():
             for hours in issue.iter_hours():
                 yield hours
+
+    def __unicode__(self):
+        return u'{}: {}'.format(self.project, self.name)

@@ -4,42 +4,68 @@ import csv
 # django
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
+from django.http import Http404
+from django.shortcuts import render, get_object_or_404
+
+# 3rd party
+from isoweek import Week
 
 # extranet
 import forms
-from models import Hours
+from extranet.models import Hours, WeeklyHours
 
 
 # === utils ===
 
-def login(request):
-    return render(request, 'extranet/login.html')
+def get_coder(func):
+    def wrapper(request, username=None):
+        if username:
+            coder = get_object_or_404(User, username=username)
+            if (not request.user.is_superuser) and (request.user != coder):
+                raise Http404()
+        else:
+            coder = request.user
+        return func(request, coder)
+    return wrapper
+
+
+def get_weekly_obj(func):
+    def wrapper(request, username, year, week):
+        if username:
+            coder = get_object_or_404(User, username=username)
+            if (not request.user.is_superuser) and (request.user != coder):
+                raise Http404()
+        else:
+            coder = request.user
+        weekly = WeeklyHours(coder, Week(int(year), int(week)))
+        return func(request, weekly)
+    return wrapper
 
 
 # === views ===
 
 @login_required
-def home(request):
-    return render(request, 'extranet/home.html')
+@get_weekly_obj
+def weekly_hours(request, weekly):
+    d = dict(
+        weekly=weekly,
+    )
+    return render(request, 'extranet/weekly_hours.html', d)
 
 
 @login_required
-def hours(request):
+@get_coder
+def upload_hours_as_csv(request, coder):
     _valid_rows, failed_rows = [], []
     valid_objs, created_objs = [], []
 
     if request.method == 'POST':
 
-        form = forms.HoursUploadForm(request.user, request.POST, request.FILES)
+        form = forms.HoursUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
 
             is_preview = 'preview' in request.POST
-
-            # get coder
-            coder_id = int(form.cleaned_data['assign_hours_to'])
-            coder = User.objects.get(pk=coder_id) if coder_id else request.user
 
             # parse rows
             rows = csv.reader(request.FILES['file'],
@@ -68,14 +94,15 @@ def hours(request):
                         valid_objs.append(obj)
 
     else:
-        form = forms.HoursUploadForm(request.user)
+        form = forms.HoursUploadForm()
 
     d = dict(
+        coder=coder,
         form=form,
-        total_hours=sum(h.amount for h in request.user.hours_set.all()),
+        total_hours=sum(h.amount for h in coder.hours_set.all()),
         failed_rows=failed_rows,
         valid_objs=valid_objs,
         created_objs=created_objs,
     )
 
-    return render(request, 'extranet/hours.html', d)
+    return render(request, 'extranet/upload_hours_as_csv.html', d)

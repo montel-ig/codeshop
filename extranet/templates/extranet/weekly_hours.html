@@ -1,0 +1,23 @@
+{% extends "extranet/base.html" %}
+{% load report_tags %}
+{% block content %}
+{{ coder }}
+<div id="weeknav">
+    <span>
+        <a href="{{ weekly.prev_week_url }}">&#10096;</a>
+        <b>Week {{ weekly.iso_week.week }}</b>
+        <a href="{{ weekly.next_week_url }}">&#10097;</a>
+    </span>
+</div>
+<h3>
+{{ weekly.coder.username }}
+{% if weekly.coder.email %}
+&lt;{{ weekly.coder.email }}&gt;
+{% endif %}
+</h3>
+{{ weekly.iso_week.monday }} - {{ weekly.iso_week.sunday }}
+<p>
+
+{% show_hours_report weekly %}
+
+{% endblock content %}

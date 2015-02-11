@@ -36,7 +36,7 @@ def parse_time(x, time_formats):
 class HoursManager(models.Manager):
 
     DATE_FORMAT = '%Y-%m-%d'
-    TIME_FORMATS = ['%H:%M', '%H:%M:%S %p']
+    TIME_FORMATS = ['%H:%M', '%I:%M:%S %p']
 
     def _csv_parse(self, row, coder=None):
 
@@ -199,7 +199,7 @@ class Hours(models.Model):
         if self.issue:
             return self.issue.need or self.issue.title
         else:
-            return self.input_data_json
+            return self.comment
 
     def as_scsv(self):
         ''' semicolon-separated values '''
