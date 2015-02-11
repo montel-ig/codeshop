@@ -9,10 +9,9 @@ from models import (Project, Need, Organization, Repository, Issue, Hours,
 # === patch & reload User/UserAdmin ===
 
 User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
-User.user_info = lambda x: u'<{}>'.format(x.email) if x.email else x.username
 User.user_hours = lambda x: sum(h.amount for h in x.hours_set.all())
 
-UserAdmin.list_display = (u'user_info', u'user_hours', u'groups_string',
+UserAdmin.list_display = (u'username', 'email', u'user_hours', u'groups_string',
                           u'is_staff')
 
 admin.site.unregister(User)
@@ -22,7 +21,7 @@ admin.site.register(User, UserAdmin)
 # === patch & reload Group/GroupAdmin ===
 
 Group.users_string = \
-    lambda self: u', '.join(x.user_info() for x in self.user_set.all())
+    lambda self: u', '.join(x.username for x in self.user_set.all())
 Group.customer_projects_string = \
     lambda self: u', '.join(map(unicode, self.customer_projects.all()))
 Group.code_projects_string = \
