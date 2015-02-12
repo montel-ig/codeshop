@@ -218,7 +218,7 @@ class ProjectReport(ReportMixin, HoursReporter):
         return u'{}'.format(self.project.name)
 
     def is_coder_report(self):
-        return True
+        return False 
 
 
 class ProjectWeekly(ProjectReport, WeeklyMixin):
