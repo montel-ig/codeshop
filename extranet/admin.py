@@ -64,7 +64,7 @@ class RepositoryAdmin(admin.ModelAdmin):
 
 @admin.register(Issue)
 class IssueAdmin(admin.ModelAdmin):
-    list_display = (u'repository', u'number', u'need', u'title', u'created_at',
+    list_display = (u'__unicode__', u'synced_at', u'need', u'created_at',
                     u'closed_at', u'total_hours')
     list_filter = (u'repository',)
 

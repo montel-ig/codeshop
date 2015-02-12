@@ -51,7 +51,7 @@
           <td class="hours">{{ hours.amount }} h</td>
           <td class="title">
             {{ hours.comment }}
-            {% if report.is_employee_report %}
+            {% if report.is_coder_report %}
               ({{ hours.project }})
             {% endif %}
           </td>
