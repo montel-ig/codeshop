@@ -23,7 +23,12 @@
       {% for hours in hours_list %}
         <tr class="issue issue-{% if issue.closed_at %}closed{% else %}open{% endif %}">
           <td class="hours">{{ hours.amount }} h</td>
-          <td class="title">{{ hours.comment }}</td>
+          <td class="title">
+            {{ hours.comment }}
+            {% if report.is_employee_report %}
+              ({{ hours.project }})
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
     {% endfor %}

@@ -35,7 +35,12 @@ class MonthObjMixin(object):
             return self.year, self.month + 1
 
 
-class WeeklyHours(HoursReporter):
+class EmployeeReportMixin:
+    def is_employee_report(self):
+        return True
+
+
+class WeeklyHours(HoursReporter, EmployeeReportMixin):
 
     def __init__(self, coder, iso_week):
         self.coder = coder
@@ -62,7 +67,7 @@ class WeeklyHours(HoursReporter):
             yield hours
 
 
-class MonthlyHours(HoursReporter, MonthObjMixin):
+class MonthlyHours(HoursReporter, MonthObjMixin, EmployeeReportMixin):
 
     def __init__(self, coder, year, month):
         self.coder = coder
