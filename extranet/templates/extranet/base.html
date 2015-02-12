@@ -170,7 +170,7 @@
 
         <div id="login">
           <h1>{{ SITE_NAME }}</h1>
-          <a class="loginlogout" href="{% url 'socialauth_begin' 'google-oauth2' %}">Log in with Google</a>
+          <a class="loginlogout" href="{% url 'socialauth_begin' 'google-oauth2' %}?next={{ next }}">Log in with Google</a>
         </div>
 
       {% endif %}

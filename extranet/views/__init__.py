@@ -9,7 +9,7 @@ from extranet.models import CoderReport
 # === utils ===
 
 def login(request):
-    return render(request, 'extranet/login.html')
+    return render(request, 'extranet/login.html', {'next': request.GET.get('next', '/')})
 
 
 # === views ===
