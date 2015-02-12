@@ -21,5 +21,6 @@ urlpatterns = patterns(
         name='extranet_project_weekly'),
     url(r'^(.*)/(\d+)/(\d+)/$', 'extranet.views.project.monthly',
         name='extranet_project_monthly'),
+    url(r'^(.*)/needs/$', 'extranet.views.project.needs', name='extranet_project_needs'),
     url(r'^(.*)/$', 'extranet.views.project.home', name='extranet_project'),
 )

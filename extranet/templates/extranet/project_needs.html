@@ -1,0 +1,33 @@
+{% extends "extranet/base.html" %}
+{% block content %}
+
+    <table id="needs">
+        <tr><th>
+            Name
+        </th><th>
+            Description
+        </th><th>
+            Estimated hours
+        </th><th>
+            Total hours
+        </th></tr>
+        {% for need in project_needs %}
+        <tr><td>
+            {{ need.name }}
+        </td><td class="description">
+            {{ need.description }}
+        </td><td class="hours">
+            {% if need.is_estimate_requested %}
+                {% if need.estimate_finished_at %}
+                    {{ need.calculate_estimate }} h
+                {% else %}
+                    TBA
+                {% endif %}
+            {% endif %}
+        </td><td class="hours">
+            {{ need.total_hours }} h
+        </td></tr>
+        {% endfor %}
+    </table>
+
+{% endblock content %}

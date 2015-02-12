@@ -151,7 +151,7 @@ class Issue(Syncable, HoursReporter):
     need = models.ForeignKey(Need, null=True, blank=True)
     estimated_hours = models.DecimalField(max_digits=3, decimal_places=1,
                                           blank=True, null=True)
-    estimated_on = models.DateField(null=True, blank=True)
+    estimated_at = models.DateTimeField(null=True, blank=True)
     work_initiated_at = models.DateTimeField(null=True, blank=True)
 
     class Meta:

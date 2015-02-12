@@ -28,12 +28,18 @@ class Project(Nameable, HoursReporter):
 class Need(models.Model, HoursReporter):
     name = models.CharField(max_length=200)
     project = models.ForeignKey(Project)
+
+    description = models.TextField(default='')
+
     created_at = models.DateTimeField(auto_now_add=True)
     is_estimate_requested = models.BooleanField(default=False)
     estimate_finished_at = models.DateTimeField(null=True, blank=True,
                                                 default=None)
     estimate_approved_at = models.DateTimeField(null=True, blank=True,
                                                 default=None)
+
+    def calculate_estimate(self):
+        return sum(x.estimated_hours for x in self.issue_set.all())
 
     def iter_hours(self):
         for issue in self.issue_set.all():

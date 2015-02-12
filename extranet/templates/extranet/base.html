@@ -63,6 +63,14 @@
                   &#x27a3;
                   <span class="currentpage">Weekly report</span>
 
+              {% elif project_report and project_needs != None %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <a href="{% url 'extranet_project' project_report.project.name %}">{{ project_report.project.name }}</a>
+                  &#x27a3;
+                  <span class="currentpage">Manage needs</span>
+
               {% elif project_report %}
 
                   <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
@@ -109,13 +117,23 @@
 
             {% elif project_weekly %}
 
+            {% elif project_report and project_needs != None %}
+
             {% elif project_report %}
 
-              <span class="navgroup">Reports:</span>
+              <table id="navtable">
+                <tr><td class="navgroup">
+                  Reports:
+                </td><td>
                   <a href="{{ project_report.current_week_url }}">Weekly</a>
                   <a href="{{ project_report.current_month_url }}">Monthly</a>
-              <br/>
-
+                </td></tr>
+                <tr><td class="navgroup">
+                  Needs & orders:
+                </td><td>
+                  <a href="{% url 'extranet_project_needs' project_report.project.name %}">Manage</a>
+                </td></tr>
+              </table>
 
             {% elif team %}
 

@@ -68,3 +68,13 @@ def home(request, project):
         project_report=ProjectReport(project),
     )
     return render(request, 'extranet/base.html', d)
+
+
+@login_required
+@get_project
+def needs(request, project):
+    d = dict(
+        project_report=ProjectReport(project),
+        project_needs=project.need_set.all().order_by('-created_at'),
+    )
+    return render(request, 'extranet/project_needs.html', d)
