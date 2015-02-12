@@ -12,7 +12,7 @@ from isoweek import Week
 
 # extranet
 import forms
-from extranet.models import Hours, WeeklyHours, MonthlyHours
+from extranet.models import Hours, CoderReport, CoderWeekly, CoderMonthly
 
 
 # === utils ===
@@ -37,7 +37,7 @@ def get_weekly_obj(func):
                 raise Http404()
         else:
             coder = request.user
-        weekly = WeeklyHours(coder, Week(int(year), int(week)))
+        weekly = CoderWeekly(coder, Week(int(year), int(week)))
         return func(request, weekly)
     return wrapper
 
@@ -50,7 +50,7 @@ def get_monthly_obj(func):
                 raise Http404()
         else:
             coder = request.user
-        monthly = MonthlyHours(coder, int(year), int(month))
+        monthly = CoderMonthly(coder, int(year), int(month))
         return func(request, monthly)
     return wrapper
 
@@ -59,20 +59,20 @@ def get_monthly_obj(func):
 
 @login_required
 @get_weekly_obj
-def weekly_hours(request, weekly):
+def weekly(request, weekly):
     d = dict(
-        weekly=weekly,
+        coder_weekly=weekly,
     )
-    return render(request, 'extranet/weekly_hours.html', d)
+    return render(request, 'extranet/coder_weekly.html', d)
 
 
 @login_required
 @get_monthly_obj
-def monthly_hours(request, monthly):
+def monthly(request, monthly):
     d = dict(
-        monthly=monthly,
+        coder_monthly=monthly,
     )
-    return render(request, 'extranet/monthly_hours.html', d)
+    return render(request, 'extranet/coder_monthly.html', d)
 
 
 @login_required

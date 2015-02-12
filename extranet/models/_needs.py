@@ -15,8 +15,8 @@ class Project(Nameable, HoursReporter):
         for hours in self.hours_set.all():
             yield hours
 
-    def get_customer_url(self):
-        return reverse('extranet_monthly_report', args=[self.name])
+    def get_absolute_url(self):
+        return reverse('extranet_project', args=[self.name])
 
     def latest_need(self):
         return self.need_set.order_by('-created_at').first()

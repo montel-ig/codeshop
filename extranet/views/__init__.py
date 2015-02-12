@@ -1,9 +1,9 @@
-# python
-from datetime import date
-
 # django
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
+
+# extranet
+from extranet.models import CoderReport
 
 
 # === utils ===
@@ -23,13 +23,9 @@ def home(request):
         if group.customer_projects.all():
             teams.add(group)
 
-    today = date.today()
-    year, week = today.isocalendar()[:2]
     d = dict(
         code_projects=projects,
         teams=teams,
-        year=year,
-        week=week,
-        month=today.month,
+        coder_report=CoderReport(request.user) if teams else None,
     )
     return render(request, 'extranet/home.html', d)

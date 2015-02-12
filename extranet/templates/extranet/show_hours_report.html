@@ -1,8 +1,34 @@
 {% if report %}
 
-  Total: <b>{{ report.total_hours }} h</b>
+  <div id="timenav">
+      <div class="control">
+          <a href="{{ report.prev_url }}">&#10096;</a>
+          <b>{{ report.time_label }}</b>
+          <a href="{{ report.next_url }}">&#10097;</a>
+      </div>
+  </div>
+
+  <h3></h3>
+  <p>
 
   <table id="report">
+    <tr class="header">
+      <td class="name">To:</td>
+      <td>{{ report.label|safe }}</td>
+      <td></td>
+    </tr>
+    <tr class="header">
+      <td class="name">Dates:</td>
+      <td>{{ report.start_date }} - {{ report.end_date }}</td>
+      <td></td>
+    </tr>
+    <tr class="header">
+      <td class="name">Hours:</td>
+      <td>{{ report.total_hours }} h</td>
+      <td></td>
+    </tr>
+    <tr class="total"><td colspan="3"></td></tr>
+
 
     {% for need, issues_with_amounts in report.iter_hours_by_needs_and_issues %}
       <tr class="need"><td colspan="3">
@@ -32,6 +58,10 @@
         </tr>
       {% endfor %}
     {% endfor %}
+    <tr><td colspan="3" class="spacer"></td></tr>
+    <tr class="total"><td colspan="3" class="header underline">Total hours</td></tr>
+    <tr class="total"><td colspan="3" class="underline"></td></tr>
+    <tr class="total"><td class="hours">{{ report.total_hours }} h</td> <td colspan="2"></td></tr>
 
   </table>
 

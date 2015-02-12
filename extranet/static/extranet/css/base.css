@@ -73,6 +73,9 @@ td.navgroup {
     font-weight: bold;
 }
 
+#report {
+    width: 100%;
+}
 #report td {
     padding: 0.2em;
     color: gray;
@@ -81,10 +84,24 @@ td.navgroup {
     font-style: italic;
 }
 #report .need td {
+    border-bottom: 1px solid silver;
     padding-top: 2em;
 }
-#report .issue .hours {
-    padding-left: 1em;
+#report .header td {
+    font-style: italic;
+    color: black;
+    padding: 0.5em;
+}
+#report .header .name {
+    background-color: #1f77b4; 
+    background-color: silver; 
+    color: white;
+    font-weight: bold;
+    text-align: right;
+    font-style: normal;
+}
+#report .issue .hours, #report .total .hours {
+    width: 4em;
     text-align: right;
     vertical-align: top;
     font-weight: bold;
@@ -92,6 +109,18 @@ td.navgroup {
     white-space: nowrap;
 
 }
+#report .total td {
+    font-weight: bold;
+}
+#report .total .header {
+}
+#report .total .underline {
+    border-bottom: 1px solid silver;
+}
+#report tr .spacer {
+    padding-top: 2em;
+}
+
 #report .issue .title {
     padding-left: 1em;
     line-height: 1em;
@@ -113,11 +142,11 @@ td.navgroup {
     background-color: #1f77b4; 
     color: white;
 }
-#weeknav {
+#timenav {
     margin-top: 1em;
     text-align: center;
 }
-#weeknav span {
+#timenav .control {
     display: inline-block;
     height: 2em;
     line-height: 2em;
@@ -125,12 +154,12 @@ td.navgroup {
     border: 1px solid gray;
     width: auto;
 }
-#weeknav span a {
+#timenav .control a {
     padding-left: 1em;
     padding-right: 1em;
     text-decoration: none;
 }
-#weeknav span b {
+#timenav .control b {
     border-left: 1px solid gray;
     border-right: 1px solid gray;
     padding-left: 1em;

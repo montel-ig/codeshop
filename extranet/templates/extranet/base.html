@@ -7,19 +7,19 @@
 <head>
 <meta charset="utf-8">
 <title>
-  {% if monthly_report %}
-    {{ monthly_report.yyyy_mm }}
-    {{ monthly_report.project }}
+  {% if project_monthly %}
+    {{ project_monthly.yyyy_mm }}
+    {{ project_monthly.project }}
   {% elif project_report %}
     {{ project_report.project }}
   {% elif team %}
     {{ team }}
-  {% elif monthly %}
-    {{ monthly.yyyy_mm }}
-    {{ monthly.coder }}
-  {% elif weekly %}
-    {{ weekly.iso_week }}
-    {{ weekly.coder }}
+  {% elif coder_monthly %}
+    {{ coder_monthly.yyyy_mm }}
+    {{ coder_monthly.coder }}
+  {% elif coder_weekly %}
+    {{ coder_weekly.iso_week }}
+    {{ coder_weekly.coder }}
   {% elif coder %}
     {{ coder }}
   {% endif %}
@@ -47,13 +47,21 @@
 
         <div id="pagecontent">
           <div id="navpath">
-              {% if monthly_report %}
+              {% if project_monthly %}
 
                   <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
                   &#x27a3;
-                  <a href="{% url 'extranet_monthly_report' monthly_report.project.name %}">{{ monthly_report.project.name }}</a>
+                  <a href="{% url 'extranet_project' project_monthly.project.name %}">{{ project_monthly.project.name }}</a>
                   &#x27a3;
-                  <span class="currentpage">{{ monthly_report }}</span>
+                  <span class="currentpage">Monthly report</span>
+
+              {% elif project_weekly %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <a href="{% url 'extranet_project' project_weekly.project.name %}">{{ project_weekly.project.name }}</a>
+                  &#x27a3;
+                  <span class="currentpage">Weekly report</span>
 
               {% elif project_report %}
 
@@ -67,15 +75,19 @@
                   &#x27a3;
                   <span class="currentpage">{{ team.name }}</span>
 
-              {% elif weekly %}
+              {% elif coder_weekly %}
 
                   <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
                   &#x27a3;
+                  {{ coder_weekly.coder }}
+                  &#x27a3;
                   <span class="currentpage">Weekly hours</span>
 
-              {% elif monthly %}
+              {% elif coder_monthly %}
 
                   <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  {{ coder_monthly.coder }}
                   &#x27a3;
                   <span class="currentpage">Monthly hours</span>
 
@@ -93,21 +105,23 @@
           </div>
           <hr />
           <div id="navbar">
-            {% if monthly_report %}
+            {% if project_monthly %}
+
+            {% elif project_weekly %}
 
             {% elif project_report %}
 
-              <span class="navgroup">Months:</span>
-              {% for monthly_report in project_report.iter_months %}
-                <a href="{% url 'extranet_monthly_report' project_report.project.name monthly_report.year monthly_report.two_digit_month %}">{{ monthly_report }}</a>
-              {% endfor %}
+              <span class="navgroup">Reports:</span>
+                  <a href="{{ project_report.current_week_url }}">Weekly</a>
+                  <a href="{{ project_report.current_month_url }}">Monthly</a>
               <br/>
+
 
             {% elif team %}
 
-            {% elif weekly %}
+            {% elif coder_weekly %}
 
-            {% elif monthly %}
+            {% elif coder_monthly %}
 
             {% elif coder %}
 
@@ -120,17 +134,17 @@
                   Projects:
                 </td><td>
                   {% for project in projects_for_customers %}
-                    <a href="{% url 'extranet_monthly_report' project.name %}">{{ project.name }}</a>
+                    <a href="{% url 'extranet_project' project.name %}">{{ project.name }}</a>
                   {% endfor %}
                 </td></tr>
               {% endif %}
 
-              {% if teams_for_coders %}
+              {% if coder_report %}
                 <tr><td class="navgroup">
                   Hours:
                 </td><td>
-                  <a href="{% url 'extranet_weekly_hours' user.username year week %}">Weekly</a>
-                  <a href="{% url 'extranet_monthly_hours' user.username year month %}">Monthly</a>
+                  <a href="{{ coder_report.current_week_url }}">Weekly</a>
+                  <a href="{{ coder_report.current_month_url }}">Monthly</a>
                   <a href="{% url 'extranet_upload_hours_as_csv' %}">Upload CSV</a>
                 </td></tr>
               {% endif %}
