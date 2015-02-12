@@ -204,3 +204,16 @@ class Hours(models.Model):
     def as_scsv(self):
         ''' semicolon-separated values '''
         return Hours.objects.csv_dump(self)
+
+    def similar_row_exists(self):
+        ''' can be used eg. when parsing new hours from CSV files '''
+        IDENTITY = ('coder', 'project', 'date', 'start_time', 'end_time',
+                    'amount', 'repository', 'issue', 'comment')
+        q = dict((key, getattr(self, key)) for key in IDENTITY)
+        try:
+            obj = Hours.objects.get(**q)
+        except Hours.DoesNotExist:
+            obj = None
+        return obj is not None
+            
+

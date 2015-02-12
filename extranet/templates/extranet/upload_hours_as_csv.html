@@ -31,8 +31,15 @@ Use the form below to upload your hours.
 {% endif %}
 
 {% if valid_objs %}
-  <p>VALID:</p>
+  <p>NEW:</p>
   {% for obj in valid_objs %}
+    <span style="color: blue">{{ obj.as_scsv }}</span><br />
+  {% endfor  %}
+{% endif %}
+
+{% if existing_objs %}
+  <p>EXISTING:</p>
+  {% for obj in existing_objs %}
     <span style="color: blue">{{ obj.as_scsv }}</span><br />
   {% endfor  %}
 {% endif %}

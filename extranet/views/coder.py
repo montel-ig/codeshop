@@ -79,7 +79,7 @@ def monthly(request, monthly):
 @get_coder
 def upload_hours_as_csv(request, coder):
     _valid_rows, failed_rows = [], []
-    valid_objs, created_objs = [], []
+    valid_objs, created_objs, existing_objs = [], [], []
 
     if request.method == 'POST':
 
@@ -101,8 +101,11 @@ def upload_hours_as_csv(request, coder):
                 else:
                     _valid_rows.append(row)
                     if is_preview:
-                        obj.as_scsv()
-                        valid_objs.append(obj)
+                        obj.as_scsv()  # make sure dump to csv works
+                        if obj.similar_row_exists():
+                            existing_objs.append(obj)
+                        else:
+                            valid_objs.append(obj)
 
             # create objects
             if not is_preview and not failed_rows:
@@ -113,7 +116,7 @@ def upload_hours_as_csv(request, coder):
                     if created:
                         created_objs.append(obj)
                     else:
-                        valid_objs.append(obj)
+                        existing_objs.append(obj)
 
     else:
         form = forms.HoursUploadForm()
@@ -123,6 +126,7 @@ def upload_hours_as_csv(request, coder):
         form=form,
         failed_rows=failed_rows,
         valid_objs=valid_objs,
+        existing_objs=existing_objs,
         created_objs=created_objs,
     )
 
