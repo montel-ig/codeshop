@@ -1,8 +1,6 @@
 {% extends "extranet/base.html" %}
 {% block content %}
-Total hours: {{ total_hours }}h
-<hr />
-<h3>{{ coder }}</h3>
+<h3>Upload hours for <i>{{ coder }}</i></h3>
 Use the form below to upload your hours.
 <p>
 <form action="{% url 'extranet_upload_hours_as_csv' coder.username %}" method="post" enctype="multipart/form-data">

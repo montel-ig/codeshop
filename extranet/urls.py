@@ -7,7 +7,7 @@ urlpatterns = patterns(
     url(r'^$', 'extranet.views.home', name='extranet_home'),
 
     # === coder ===
-    url(r'^hours/(.+)/(\d+)/week/(\d+)/$', 'extranet.views.coder.weekly_hours',
+    url(r'^hours/(.+)/(\d+)/W(\d+)/$', 'extranet.views.coder.weekly_hours',
         name='extranet_weekly_hours'),
     url(r'^hours/(.+)/(\d+)/(\d+)/$', 'extranet.views.coder.monthly_hours',
         name='extranet_monthly_hours'),

@@ -6,7 +6,25 @@
 <!--[if (gte IE 9)|!(IE)]><!--> <html lang="en"> <!--<![endif]-->
 <head>
 <meta charset="utf-8">
-<title>{{ SITE_NAME }}</title>
+<title>
+  {% if monthly_report %}
+    {{ monthly_report.yyyy_mm }}
+    {{ monthly_report.project }}
+  {% elif project_report %}
+    {{ project_report.project }}
+  {% elif team %}
+    {{ team }}
+  {% elif monthly %}
+    {{ monthly.yyyy_mm }}
+    {{ monthly.coder }}
+  {% elif weekly %}
+    {{ weekly.iso_week }}
+    {{ weekly.coder }}
+  {% elif coder %}
+    {{ coder }}
+  {% endif %}
+  ({{ SITE_NAME }})
+</title>
 {% if not user.is_authenticated %}
   <link rel="stylesheet" type="text/css" href="{% static 'extranet/css/login.css' %}" />
 {% endif %}

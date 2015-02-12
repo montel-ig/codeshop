@@ -121,7 +121,6 @@ def upload_hours_as_csv(request, coder):
     d = dict(
         coder=coder,
         form=form,
-        total_hours=sum(h.amount for h in coder.hours_set.all()),
         failed_rows=failed_rows,
         valid_objs=valid_objs,
         created_objs=created_objs,
