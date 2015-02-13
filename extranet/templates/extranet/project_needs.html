@@ -7,25 +7,77 @@
         </th><th>
             Description
         </th><th>
-            Estimated hours
+            Created on 
+        </th><th>
+            Total estimated hours
+        </th><th>
+            Estimate approved
+        </th><th>
+            Work initiated on 
+        </th><th>
+            Work finished on 
+        </th><th>
+            Sub-tasks 
         </th><th>
             Total hours
         </th></tr>
         {% for need in project_needs %}
-        <tr><td>
+        <tr><td class="name">
             {{ need.name }}
         </td><td class="description">
             {{ need.description }}
+        </td><td>
+            <span class="created node">
+                {{ need.created_at|date:'Y-m-d' }}
+            </span>
         </td><td class="hours">
             {% if need.is_estimate_requested %}
                 {% if need.estimate_finished_at %}
-                    {{ need.calculate_estimate }} h
+                    <span class="node estimate">
+                        {{ need.calculate_estimate }} h
+                    </span>
                 {% else %}
-                    TBA
+                    <span class="alert node">requested</span>
                 {% endif %}
+            {% else %}
+              <span class="not-requested node">
+                n/a 
+              </span>
             {% endif %}
+        </td><td>
+          {% if need.is_estimate_requested %}
+              {% if need.estimate_finished_at %}
+                  {% if need.estimate_approved_at %}
+                    <span class="date node">
+                      {{ need.estimate_approved_at|date:'Y-m-d' }}
+                    </span>
+                  {% else %}
+                    <span class="alert node">pending</span>
+                  {% endif %}
+              {% endif %}
+          {% else %}
+              <span class="not-requested node">
+                  n/a
+              </span>
+          {% endif %}
+        </td><td>
+          {% if need.first_issue_started_at %}
+            <span class="started node">
+                {{ need.first_issue_started_at|date:'Y-m-d' }}
+            </span>
+          {% endif %}
+        </td><td>
+          {% if need.all_issues_closed_at %}
+            <span class="date closed node">
+              {{ need.all_issues_closed_at|date:'Y-m-d' }}
+            </span>
+          {% endif %}
+        </td><td>
+            {{ need.issue_set.all|length }}
         </td><td class="hours">
-            {{ need.total_hours }} h
+          {% if need.total_hours %}
+            <span class="work node">{{ need.total_hours }} h</span>
+          {% endif %}
         </td></tr>
         {% endfor %}
     </table>

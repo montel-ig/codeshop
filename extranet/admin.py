@@ -88,6 +88,7 @@ class ProjectAdmin(admin.ModelAdmin):
 class NeedAdmin(admin.ModelAdmin):
     list_display = (u'project', u'name', u'is_estimate_requested',
                     u'estimate_finished_at', u'created_at', u'total_hours')
+    list_filter = (u'project', u'is_estimate_requested')
 
 
 @admin.register(HourTag)

@@ -166,14 +166,67 @@ td.navgroup {
     padding-right: 1em;
 }
 
+#needs {
+    width: 100%;
+}
 #needs td, #needs th {
+    text-align: center;
+    vertical-align: top;
+    font-size: 10px;
     color: gray;
     padding: 0.5em;
     line-height: 1em;
+    border-bottom: 1px dashed silver;
+    padding-top: 1em;
+    padding-bottom: 1em;
+}
+#needs .name {
+    font-weight: bold;
+    text-align: left;
 }
 #needs .description {
-    font-size: 10px;
+    text-align: left;
 }
 #needs .hours {
-    text-align: right;
+    text-align: center;
+    width: 3em;
+}
+#needs .node {
+    white-space: nowrap;
+    padding: 0.3em;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+#needs .created, #needs .estimate {
+    background-color: gray;
+    color: white;
+}
+#needs .work, #needs .not-requested {
+    background-color: #ccc;
+    color: white;
+}
+#needs .date {
+    background-color: gray;
+    color: white;
+    width: 6em;
+}
+#needs .started {
+    background-color: #1f77b4;
+    color: white;
+}
+#needs .date.closed {
+    background-color: gray;
+    color: white;
+    /*
+    */
+    color: black;
+    background-color: #ff7f0e;
+    font-weight: bold;
+}
+#needs .alert {
+    background-color: red;
+    color: black;
 }
