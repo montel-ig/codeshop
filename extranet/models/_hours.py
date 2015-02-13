@@ -17,6 +17,17 @@ from ._issues import Issue, Project, Repository
 from .utils import HoursReporter, Nameable
 
 
+# === schema-related ===
+
+HOURS_IDENTITY_FIELDS = (
+    'coder', 'project', 'date', 'amount', 'start_time', 'issue', 'repository',
+    'comment',
+)
+HOURS_EXTRA_FIELDS = (
+    'end_time', 'input_data_json',
+)
+
+
 # === utils  ===
 
 def parse_time(x, time_formats):
@@ -120,17 +131,13 @@ class HoursManager(models.Manager):
 
         parsed = self._csv_parse(row, coder=coder)
 
-        obj, created = Hours.objects.get_or_create(
-            coder=parsed.coder,
-            project=parsed.project,
-            date=parsed.date,
-            start_time=parsed.start_time,
-            end_time=parsed.end_time,
-            amount=parsed.amount,
-            repository=parsed.repository,
-            issue=parsed.issue,
-            comment=parsed.comment,
-            input_data_json=parsed.input_data_json)
+        # get unique object
+        q = dict((key, getattr(parsed, key)) for key in HOURS_IDENTITY_FIELDS)
+        obj, created = Hours.objects.get_or_create(**q)
+
+        # allow overwriting some fields
+        for key in HOURS_EXTRA_FIELDS:
+            setattr(obj, key, getattr(parsed, key))
 
         # overwrite tags, regardless of whether the obj was created of not
         tags = []
@@ -173,6 +180,7 @@ class Hours(models.Model):
 
     # meta
     created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True, null=True)
     input_data_json = models.TextField(null=True, blank=True)  # sys info
 
     class Meta:
@@ -207,10 +215,10 @@ class Hours(models.Model):
 
     def similar_row_exists(self):
         ''' can be used eg. when parsing new hours from CSV files '''
-        IDENTITY = ('coder', 'project', 'date', 'start_time', 'end_time',
-                    'amount', 'repository', 'issue', 'comment')
-        q = dict((key, getattr(self, key)) for key in IDENTITY)
+
         try:
+            q = dict((key, getattr(self, key)) for key in
+                     HOURS_IDENTITY_FIELDS)
             obj = Hours.objects.get(**q)
         except Hours.DoesNotExist:
             obj = None

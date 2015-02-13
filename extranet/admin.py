@@ -102,4 +102,4 @@ class HoursAdmin(admin.ModelAdmin):
     list_filter = (u'coder', u'project')
     readonly_fields = (u'coder',  u'date', u'start_time', u'end_time',
                        u'amount', u'comment', u'input_data_json',
-                       u'created_at',)
+                       u'created_at', u'updated_at',)
