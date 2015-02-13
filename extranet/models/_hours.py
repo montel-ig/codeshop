@@ -58,7 +58,7 @@ class HoursManager(models.Manager):
             proj, date, strt, end, hrs, tags, repo, iss, comment = row
 
         # === tags ===
-        tags = [x.strip() for x in tags.split(',')]
+        tags = [x.strip().lower() for x in tags.split(',')]
         assert(tags)
 
         # === repository and issue ===
