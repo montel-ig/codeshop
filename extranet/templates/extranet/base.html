@@ -123,15 +123,15 @@
 
               <table id="navtable">
                 <tr><td class="navgroup">
+                  Needs & orders:
+                </td><td>
+                  <a href="{% url 'extranet_project_needs' project_report.project.name %}">Manage</a>
+                </td></tr>
+                <tr><td class="navgroup">
                   Reports:
                 </td><td>
                   <a href="{{ project_report.current_week_url }}">Weekly</a>
                   <a href="{{ project_report.current_month_url }}">Monthly</a>
-                </td></tr>
-                <tr><td class="navgroup">
-                  Needs & orders:
-                </td><td>
-                  <a href="{% url 'extranet_project_needs' project_report.project.name %}">Manage</a>
                 </td></tr>
               </table>
 
