@@ -11,12 +11,15 @@ class Project(Nameable, HoursReporter):
     customer_team = models.ForeignKey(Group, related_name='code_projects')
     coder_team = models.ForeignKey(Group, related_name='customer_projects')
 
+    def get_absolute_url(self):
+        return reverse('extranet_project', args=[self.name])
+
+    def is_coder_team_member(self, user):
+        return user in self.coder_team.user_set.all()
+
     def iter_hours(self):
         for hours in self.hours_set.all():
             yield hours
-
-    def get_absolute_url(self):
-        return reverse('extranet_project', args=[self.name])
 
     def latest_need(self):
         return self.need_set.order_by('-created_at').first()

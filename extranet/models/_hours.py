@@ -88,6 +88,7 @@ class HoursManager(models.Manager):
             comment=comment,
             input_data_json=json.dumps(row)
         )
+        assert project.is_coder_team_member(coder), u'Not allowed'
 
         # don't save yet!
 
