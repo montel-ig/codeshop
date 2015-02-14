@@ -12,7 +12,7 @@ from isoweek import Week
 
 # extranet
 import forms
-from extranet.models import Hours, CoderReport, CoderWeekly, CoderMonthly
+from extranet.models import Hours, CoderWeekly, CoderMonthly
 
 
 # === utils ===
@@ -121,6 +121,11 @@ def upload_hours_as_csv(request, coder):
     else:
         form = forms.HoursUploadForm()
 
+    def iter_customer_projects():
+        for group in coder.groups.all():
+            for project in group.customer_projects.all():
+                yield project
+
     d = dict(
         coder=coder,
         form=form,
@@ -128,6 +133,7 @@ def upload_hours_as_csv(request, coder):
         valid_objs=valid_objs,
         existing_objs=existing_objs,
         created_objs=created_objs,
+        customer_projects=set(iter_customer_projects()),
     )
 
     return render(request, 'extranet/upload_hours_as_csv.html', d)

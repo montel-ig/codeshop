@@ -13,8 +13,12 @@ Use the form below to upload your hours.
   </td></tr>
   </table>
 </form>
-
 <p>
+<hr />
+<p>
+Allowed project names:
+<p>
+{% for project in customer_projects %}<span class="tag project-name">{{ project.name }}</span>{% endfor %}
 
 {% if created_objs %}
   <p>CREATED:</p>

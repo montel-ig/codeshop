@@ -230,3 +230,15 @@ td.navgroup {
     background-color: red;
     color: black;
 }
+
+.tag.project-name {
+    white-space: nowrap;
+    padding: 0.3em;
+    display: inline-block;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+    margin-right: 1em;
+    font-size: 10px;
+    font-family: monospace;
+}
