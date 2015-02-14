@@ -149,7 +149,7 @@
 
               {% if projects_for_customers %}
                 <tr><td class="navgroup">
-                  Projects:
+                  Project administration:
                 </td><td>
                   {% for project in projects_for_customers %}
                     <a href="{% url 'extranet_project' project.name %}">{{ project.name }}</a>
@@ -159,7 +159,7 @@
 
               {% if coder_report %}
                 <tr><td class="navgroup">
-                  Hours:
+                  Hour reporting:
                 </td><td>
                   <a href="{{ coder_report.current_week_url }}">Weekly</a>
                   <a href="{{ coder_report.current_month_url }}">Monthly</a>

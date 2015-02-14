@@ -16,6 +16,9 @@ def user_projects_and_teams(request):
         projects.update(group.code_projects.all())
         if group.customer_projects.all():
             teams.add(group)
+
+    projects = list(projects)
+    projects.sort(key=lambda x: x.name)
     return dict(
         projects_for_customers=projects,
         teams_for_coders=teams,
