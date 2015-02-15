@@ -53,7 +53,7 @@ class RepositoryAdmin(admin.ModelAdmin):
     actions = ['sync']
 
     def get_readonly_fields(self, request, obj=None):
-        fields = (u'synced_at',)
+        fields = tuple()
         return (u'organization', u'name') + fields if obj else fields
 
     def sync(self, request, queryset):
