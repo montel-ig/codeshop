@@ -142,6 +142,32 @@ td.navgroup {
     background-color: #1f77b4; 
     color: white;
 }
+#report .issue .coder {
+    text-align: right;
+}
+#report .issue .coder span {
+    background-color: gray; 
+    color: white;
+
+    white-space: nowrap;
+    padding: 0.3em;
+    border-radius: 5px;
+    display: inline-block;
+    text-align: center;
+    padding-left: 1em;
+    padding-right: 1em;
+
+    font-size: 80%;
+    line-height: 1em;
+}
+#report .issue-closed .coder span {
+    background-color: #ff7f0e;
+    color: black;
+}
+#report .issue-open .coder span {
+    background-color: #1f77b4;
+    color: white;
+}
 #timenav {
     margin-top: 1em;
     text-align: center;
@@ -241,4 +267,78 @@ td.navgroup {
     margin-right: 1em;
     font-size: 10px;
     font-family: monospace;
+}
+
+table#weekly-meeting {
+    width: 100%;
+}
+table#weekly-meeting .week {
+    padding: 2em;
+    padding-top: 0em;
+    padding-bottom: 4em;
+    width: 50%;
+}
+table#weekly-meeting .this-week {
+    /*
+    border-right: 4px solid #ff7f0e;
+    border-right: 1px solid silver;
+    */
+}
+#weekly-meeting .project_name {
+    vertical-align: top;
+    width: 12px;
+    display: inline-block;
+    height: 100%;
+    min-width: 2em;
+    background-color: #ff7f0e;
+    background-color: #1f77b4;
+    background-color: black;
+    background-color: gray;
+    background-color: silver;
+    font-weight: bold;
+    font-size: 9px;
+    color: white;
+    border-radius: 2em;
+}
+/*
+#weekly-meeting td, #weekly-meeting th {
+    border: 1px solid red;
+}
+*/
+#weekly-meeting td.week {
+    vertical-align: top;
+}
+#weekly-meeting .divider {
+    height: 5em;
+}
+#weekly-meeting .project_name span {
+    display: block;
+    text-transform: uppercase;
+    transform-origin: top right;
+    line-height: 1.5em;
+    padding-right: 1em;
+    position: relative;
+    text-align: right;
+    width: 24em;
+    left: -24.7em;
+    top: 0;
+
+    /* Safari */
+    -webkit-transform: rotate(-90deg);
+    /* Firefox */
+    -moz-transform: rotate(-90deg);
+    /* IE */
+    -ms-transform: rotate(-90deg);
+    /* Opera */
+    -o-transform: rotate(-90deg);
+    /* Internet Explorer */
+    filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3);
+}
+#weekly-meeting th.project {
+    text-transform: uppercase;
+    font-weight: bold;
+    border-top: 1px dashed gray;
+}
+#weekly-meeting #report {
+    font-size: 80%;
 }

@@ -77,11 +77,19 @@
                   &#x27a3;
                   <span class="currentpage">{{ project_report.project.name }}</span>
 
-              {% elif team %}
+              {% elif team_report %}
 
                   <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
                   &#x27a3;
-                  <span class="currentpage">{{ team.name }}</span>
+                  <span class="currentpage">{{ team_report.team.name }}</span>
+
+              {% elif team_weekly_meeting %}
+
+                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+                  &#x27a3;
+                  <a href="{% url 'extranet_team' team_weekly_meeting.team.name %}">{{ team_weekly_meeting.team.name }}</a>
+                  &#x27a3;
+                  <span class="currentpage">Weekly meeting</span>
 
               {% elif coder_weekly %}
 
@@ -135,7 +143,17 @@
                 </td></tr>
               </table>
 
-            {% elif team %}
+            {% elif team_report %}
+
+              <table id="navtable">
+                <tr><td class="navgroup">
+                  Reports:
+                </td><td>
+                  <a href="{% url 'extranet_team_weekly_meeting' team_report.team.name %}">Weekly meeting</a>
+                </td></tr>
+              </table>
+
+            {% elif team_weekly_meeting %}
 
             {% elif coder_weekly %}
 
@@ -157,13 +175,23 @@
                 </td></tr>
               {% endif %}
 
+              {% if teams_for_coders %}
+                <tr><td class="navgroup">
+                  Team(s):
+                </td><td>
+                  {% for team in teams_for_coders %}
+                    <a href="{% url 'extranet_team' team.name %}">{{ team.name }}</a>
+                  {% endfor %}
+                </td></tr>
+              {% endif %}
+
               {% if coder_report %}
                 <tr><td class="navgroup">
                   Hour reporting:
                 </td><td>
+                  <a href="{% url 'extranet_upload_hours_as_csv' %}">Upload CSV</a>
                   <a href="{{ coder_report.current_week_url }}">Weekly</a>
                   <a href="{{ coder_report.current_month_url }}">Monthly</a>
-                  <a href="{% url 'extranet_upload_hours_as_csv' %}">Upload CSV</a>
                 </td></tr>
               {% endif %}
 

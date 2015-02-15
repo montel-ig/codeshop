@@ -6,6 +6,9 @@ from datetime import date
 from django.core.urlresolvers import reverse
 from django.db import models
 
+# 3rd party
+from isoweek import Week
+
 # this package
 from utils import HoursReporter
 from _hours import Hours
@@ -18,7 +21,7 @@ class ReportMixin:
     def label(self):
         raise NotImplementedError()
 
-    def is_coder_report(self):
+    def get_report_type(self):
         raise NotImplementedError()
 
 
@@ -114,8 +117,8 @@ class CoderReport(ReportMixin, HoursReporter):
     def label(self):
         return u'{} &lt;{}&gt;'.format(self.coder.username, self.coder.email)
 
-    def is_coder_report(self):
-        return True
+    def get_report_type(self):
+        return 'coder'
 
 
 class CoderWeekly(CoderReport, WeeklyMixin):
@@ -212,13 +215,19 @@ class ProjectReport(ReportMixin, HoursReporter):
                 y, m = divmod(ym, 12)
                 yield ProjectMonthly(self, y, m + 1)
 
+    def iter_needs_with_open_issues(self):
+        for need in self.project.need_set.all():
+            issues = need.issue_set.filter(closed_at=None)
+            if issues:
+                yield need, issues
+
     # === ReportMixin methods ===
 
     def label(self):
         return u'{}'.format(self.project.name)
 
-    def is_coder_report(self):
-        return False 
+    def get_report_type(self):
+        return 'project'
 
 
 class ProjectWeekly(ProjectReport, WeeklyMixin):
@@ -276,3 +285,46 @@ class ProjectMonthly(ProjectReport, MonthlyMixin):
         year, month = self.next_month()
         return reverse('extranet_project_monthly', args=(self.project.name,
                                                          year, month))
+
+
+# === reports for teams ===
+
+class TeamReport(ReportMixin, HoursReporter):
+    def __init__(self, team):
+        self.team = team
+
+    def iter_projects(self):
+        for project in self.team.customer_projects.all().order_by('name'):
+            yield project
+
+    # === ReportMixin methods ===
+
+    def label(self):
+        return u'{}'.format(self.team.name)
+
+    def get_report_type(self):
+        return 'team'
+
+
+class TeamWeeklyMeeting(TeamReport):
+    def __init__(self, team):
+        self.team = team
+        self.iso_week = Week(*date.today().isocalendar()[:2]) - 2  # last week
+        self.iso_week = Week(*date.today().isocalendar()[:2]) - 1  # last week
+        self.iso_week = Week(*date.today().isocalendar()[:2])  # last week
+
+    def __unicode__(self):
+        return u'{}'.format(self.iso_week)
+
+    def iter_last_week_project_reports(self):
+        for project in self.iter_projects():
+            yield ProjectWeekly(project, self.iso_week)
+
+    # === HoursReporter methods ===
+
+    def iter_hours(self):
+        for project in self.iter_projects():
+            for hours in Hours.objects.filter(date__gte=self.start_date(),
+                                              date__lte=self.end_date(),
+                                              project=project):
+                yield hours

@@ -1,17 +1,20 @@
 {% if report %}
 
-  <div id="timenav">
-      <div class="control">
-          <a href="{{ report.prev_url }}">&#10096;</a>
-          <b>{{ report.time_label }}</b>
-          <a href="{{ report.next_url }}">&#10097;</a>
-      </div>
-  </div>
+  {% if show_timenav %}
+    <div id="timenav">
+        <div class="control">
+            <a href="{{ report.prev_url }}">&#10096;</a>
+            <b>{{ report.time_label }}</b>
+            <a href="{{ report.next_url }}">&#10097;</a>
+        </div>
+    </div>
 
-  <h3></h3>
-  <p>
+    <p>
+  {% endif %}
 
-  <table id="report">
+  <table id="report" class="{{ report.get_report_type }}">
+
+  {% if show_header %}
     <tr class="header">
       <td class="name">To:</td>
       <td>{{ report.label|safe }}</td>
@@ -27,17 +30,24 @@
       <td>{{ report.total_hours }} h</td>
       <td></td>
     </tr>
-    <tr class="total"><td colspan="3"></td></tr>
-
-
+  {% endif %}
     {% for need, issues_with_amounts in report.iter_hours_by_needs_and_issues %}
       <tr class="need"><td colspan="3">
           {% if need %}<b>{{ need }}</b>{% else %}<i>---</i>{% endif %}
       </td></tr>
-      {% for issue, amount in issues_with_amounts %}
+      {% for issue, amount, coders in issues_with_amounts %}
         <tr class="issue issue-{% if issue.closed_at %}closed{% else %}open{% endif %}">
           <td class="hours">{{ amount }} h</td>
           <td class="title">{{ issue.title }}</td>
+          {% if show_coder_related_to_hours %}
+            <td class="coder">
+              {% for coder in coders %}
+              <span>
+                {{ coder }}
+              </span>
+              {% endfor %}
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     {% endfor %}
@@ -47,14 +57,21 @@
           {% if tags %}<b>{{ tags }}</b>{% else %}<i>---</i>{% endif %}
       </td></tr>
       {% for hours in hours_list %}
-        <tr class="issue issue-{% if issue.closed_at %}closed{% else %}open{% endif %}">
+        <tr class="issue">
           <td class="hours">{{ hours.amount }} h</td>
           <td class="title">
             {{ hours.comment }}
-            {% if report.is_coder_report %}
+            {% if show_project_for_other_hours %}
               ({{ hours.project }})
             {% endif %}
           </td>
+          {% if show_coder_related_to_hours %}
+            <td class="coder">
+              <span>
+                {{ hours.coder }}
+              </span>
+            </td>
+          {% endif %}
         </tr>
       {% endfor %}
     {% endfor %}

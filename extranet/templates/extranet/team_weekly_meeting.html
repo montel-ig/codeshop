@@ -1,0 +1,61 @@
+{% extends "extranet/base.html" %}
+{% load report_tags %}
+{% block content %}
+
+<table id="weekly-meeting">
+    {% for lwpr in team_weekly_meeting.iter_last_week_project_reports %}
+        <tr>
+            <th>LAST WEEK</th>
+            <th></th>
+            <th>THIS WEEK</th>
+        </tr>
+        <tr>
+            <td class="week this-week">
+            {% show_hours_report lwpr show_timenav=False show_header=False show_coder_related_to_hours=True show_project_for_other_hours=False %}
+        </td>
+            <td class="project_name">
+                <div>
+                <span>
+                    {{ lwpr.project.name }}
+                </span>
+                </div>
+            </td>
+        <td class="week">
+
+            <table id="report">
+            {% for need, issues in lwpr.iter_needs_with_open_issues %}
+
+              <tr class="need"><td colspan="3">
+                 <b>{{ need }}</b>
+              </td></tr>
+
+              {% for issue in issues %}
+                <tr class="issue issue-{% if issue.closed_at %}closed{% else %}open{% endif %}">
+                  <td class="hours">
+                      {% if issue.estimated_hours %}
+                          {{ issue.estimated_hours }}
+                      {% else %}
+                          ?
+                      {% endif %}
+                      h
+                  </td>
+                  <td class="title">{{ issue.title }}</td>
+                  <td class="coder">
+                    {% if issue.assignee_login %}
+                      <span>
+                        {{ issue.assignee_login }}
+                      </span>
+                    {% endif %}
+                  </td>
+                </tr>
+
+              {% endfor %}
+            {% endfor %}
+            </table>
+
+        </td></tr>
+        <tr class="divider" />
+    {% endfor %}
+</table>
+
+{% endblock content %}

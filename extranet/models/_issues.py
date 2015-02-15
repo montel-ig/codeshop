@@ -146,6 +146,7 @@ class Issue(Syncable, HoursReporter):
     updated_at = models.DateTimeField(null=True)
     closed_at = models.DateTimeField(null=True, blank=True)
     html_url = models.URLField(null=True)
+    assignee_login = models.CharField(max_length=100, null=True, blank=True)
 
     # non-github fields
     need = models.ForeignKey(Need, null=True, blank=True)
@@ -165,6 +166,7 @@ class Issue(Syncable, HoursReporter):
                   'html_url']
         for attr in FIELDS:
             setattr(self, attr, getattr(d, attr))
+        self.assignee_login = d.assignee.login if d.assignee else None
         self._update_sync_timestamp(save=False)
         self.save()
 

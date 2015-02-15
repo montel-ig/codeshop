@@ -16,6 +16,11 @@ urlpatterns = patterns(
     url(r'^hours/$', 'extranet.views.coder.upload_hours_as_csv',
         name='extranet_upload_hours_as_csv'),
 
+    # === team ===
+    url(r'^team/(.*)/meeting/$', 'extranet.views.team.weekly_meeting',
+        name='extranet_team_weekly_meeting'),
+    url(r'^team/(.*)/$', 'extranet.views.team.home', name='extranet_team'),
+
     # === customer ===
     url(r'^(.*)/(\d+)/W(\d+)/$', 'extranet.views.project.weekly',
         name='extranet_project_weekly'),
