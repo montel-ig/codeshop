@@ -309,9 +309,7 @@ class TeamReport(ReportMixin, HoursReporter):
 class TeamWeeklyMeeting(TeamReport):
     def __init__(self, team):
         self.team = team
-        self.iso_week = Week(*date.today().isocalendar()[:2]) - 2  # last week
         self.iso_week = Week(*date.today().isocalendar()[:2]) - 1  # last week
-        self.iso_week = Week(*date.today().isocalendar()[:2])  # last week
 
     def __unicode__(self):
         return u'{}'.format(self.iso_week)
