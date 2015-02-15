@@ -98,9 +98,10 @@ class HourTagAdmin(admin.ModelAdmin):
 
 @admin.register(Hours)
 class HoursAdmin(admin.ModelAdmin):
-    list_display = (u'coder', u'project', u'date', u'amount', u'tags_string',
-                    u'issue', u'ticket_info')
+    list_display = (u'created_at', u'project', u'date', u'start_time',
+                    u'amount', u'repository', u'issue', u'comment',
+                    u'tags_string', u'ticket_info')
     list_filter = (u'coder', u'project')
     readonly_fields = (u'coder',  u'date', u'start_time', u'end_time',
                        u'amount', u'comment', u'input_data_json',
-                       u'created_at', u'updated_at',)
+                       u'created_at', u'updated_at', 'as_scsv')

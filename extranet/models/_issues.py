@@ -159,7 +159,7 @@ class Issue(Syncable, HoursReporter):
         verbose_name = 'Github issue'
 
     def __unicode__(self):
-        return u'{}#{} - {}'.format(self.repository, self.number, self.title)
+        return u'#{}'.format(self.number)
 
     def _sync_data(self, d):
         FIELDS = ['title', 'created_at', u'updated_at', 'closed_at',
