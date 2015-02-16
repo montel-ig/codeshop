@@ -11,7 +11,7 @@
         </tr>
         <tr>
             <td class="week this-week">
-            {% show_hours_report lwpr show_timenav=False show_header=False show_coder_related_to_hours=True show_project_for_other_hours=False %}
+            {% show_hours_report lwpr show_timenav=False show_header=False show_coder_related_to_hours=True show_project_for_other_hours=False link_title_to_github=True  %}
         </td>
             <td class="project_name">
                 <div>
@@ -39,7 +39,9 @@
                       {% endif %}
                       h
                   </td>
-                  <td class="title">{{ issue.title }}</td>
+                  <td class="title">
+                      <a href="{{ issue.html_url }}" target="_new">{{ issue.title }}</a>
+                  </td>
                   <td class="coder">
                     {% if issue.assignee_login %}
                       <span>

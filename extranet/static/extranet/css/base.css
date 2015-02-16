@@ -79,6 +79,9 @@ td.navgroup {
 #report td {
     padding: 0.2em;
     color: gray;
+    line-height: 1.5em;
+    padding-top: 1em;
+    vertical-align: top;
 }
 #report td.title {
     font-style: italic;
@@ -123,7 +126,7 @@ td.navgroup {
 
 #report .issue .title {
     padding-left: 1em;
-    line-height: 1em;
+    line-height: 1.2em;
 }
 #report .issue .id {
     border: 1px solid gray;
