@@ -5,3 +5,20 @@
 {% show_hours_report coder_monthly %}
 
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    {{ coder_monthly.coder }}
+    &#x27a3;
+    <span class="currentpage">Monthly hours</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ coder_monthly.yyyy_mm }}
+    {{ coder_monthly.coder }}
+
+{% endblock page_title %}

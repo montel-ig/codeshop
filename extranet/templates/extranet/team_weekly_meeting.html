@@ -1,8 +1,9 @@
 {% extends "extranet/base.html" %}
 {% load report_tags %}
+
 {% block content %}
 
-<table id="weekly-meeting">
+    <table id="weekly-meeting">
     {% for lwpr in team_weekly_meeting.iter_last_week_project_reports %}
         <tr>
             <th>LAST WEEK</th>
@@ -58,6 +59,24 @@
         </td></tr>
         <tr class="divider" />
     {% endfor %}
-</table>
+    </table>
 
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    <a href="{% url 'extranet_team' team_weekly_meeting.team.name %}">{{ team_weekly_meeting.team.name }}</a>
+    &#x27a3;
+    <span class="currentpage">Weekly meeting</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ team_weekly_meeting.team.name }}
+    -
+    Weekly meeting
+
+{% endblock page_title %}

@@ -1,9 +1,9 @@
 {% extends "extranet/base.html" %}
 {% block content %}
-<h3>Upload hours for <i>{{ coder }}</i></h3>
+<h3>Upload hours for <i>{{ coder.as_html }}</i></h3>
 Use the form below to upload your hours.
 <p>
-<form action="{% url 'extranet_upload_hours_as_csv' coder.username %}" method="post" enctype="multipart/form-data">
+<form action="{% url 'extranet_upload_hours_as_csv' coder.user.username %}" method="post" enctype="multipart/form-data">
   {% csrf_token %}
   <table>
   {{ form }}
@@ -18,7 +18,7 @@ Use the form below to upload your hours.
 <p>
 Allowed project names:
 <p>
-{% for project in customer_projects %}<span class="tag project-name">{{ project.name }}</span>{% endfor %}
+{% for project in coder.iter_projects %}<span class="tag project-name">{{ project.name }}</span>{% endfor %}
 
 {% if created_objs %}
   <p>CREATED:</p>
@@ -84,3 +84,17 @@ A few more examples:
 </pre>
 </div>
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    {{ coder }}
+    &#x27a3;
+    <span class="currentpage">Upload hours CSV</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+    {{ coder }}
+{% endblock page_title %}

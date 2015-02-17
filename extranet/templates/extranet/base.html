@@ -7,22 +7,7 @@
 <head>
 <meta charset="utf-8">
 <title>
-  {% if project_monthly %}
-    {{ project_monthly.yyyy_mm }}
-    {{ project_monthly.project }}
-  {% elif project_report %}
-    {{ project_report.project }}
-  {% elif team %}
-    {{ team }}
-  {% elif coder_monthly %}
-    {{ coder_monthly.yyyy_mm }}
-    {{ coder_monthly.coder }}
-  {% elif coder_weekly %}
-    {{ coder_weekly.iso_week }}
-    {{ coder_weekly.coder }}
-  {% elif coder %}
-    {{ coder }}
-  {% endif %}
+  {% block page_title %}{% endblock page_title %}
   ({{ SITE_NAME }})
 </title>
 {% if not user.is_authenticated %}
@@ -47,165 +32,11 @@
 
         <div id="pagecontent">
           <div id="navpath">
-              {% if project_monthly %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <a href="{% url 'extranet_project' project_monthly.project.name %}">{{ project_monthly.project.name }}</a>
-                  &#x27a3;
-                  <span class="currentpage">Monthly report</span>
-
-              {% elif project_weekly %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <a href="{% url 'extranet_project' project_weekly.project.name %}">{{ project_weekly.project.name }}</a>
-                  &#x27a3;
-                  <span class="currentpage">Weekly report</span>
-
-              {% elif project_report and project_needs != None %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <a href="{% url 'extranet_project' project_report.project.name %}">{{ project_report.project.name }}</a>
-                  &#x27a3;
-                  <span class="currentpage">Manage needs</span>
-
-              {% elif project_report %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <span class="currentpage">{{ project_report.project.name }}</span>
-
-              {% elif team_report %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <span class="currentpage">{{ team_report.team.name }}</span>
-
-              {% elif team_weekly_meeting %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <a href="{% url 'extranet_team' team_weekly_meeting.team.name %}">{{ team_weekly_meeting.team.name }}</a>
-                  &#x27a3;
-                  <span class="currentpage">Weekly meeting</span>
-
-              {% elif coder_weekly %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  {{ coder_weekly.coder }}
-                  &#x27a3;
-                  <span class="currentpage">Weekly hours</span>
-
-              {% elif coder_monthly %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  {{ coder_monthly.coder }}
-                  &#x27a3;
-                  <span class="currentpage">Monthly hours</span>
-
-              {% elif coder %}
-
-                  <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
-                  &#x27a3;
-                  <span class="currentpage">Upload hours CSV</span>
-
-              {% else %}
-
-                  <span class="currentpage">{{ SITE_NAME }}</span>
-
-              {% endif %}
+              {% block navpath %}{% endblock navpath %}
           </div>
           <hr />
           <div id="navbar">
-            {% if project_monthly %}
-
-            {% elif project_weekly %}
-
-            {% elif project_report and project_needs != None %}
-
-            {% elif project_report %}
-
-              <table id="navtable">
-                <tr><td class="navgroup">
-                  Needs & orders:
-                </td><td>
-                  <a href="{% url 'extranet_project_needs' project_report.project.name %}">Manage</a>
-                </td></tr>
-                <tr><td class="navgroup">
-                  Reports:
-                </td><td>
-                  <a href="{{ project_report.current_week_url }}">Weekly</a>
-                  <a href="{{ project_report.current_month_url }}">Monthly</a>
-                </td></tr>
-              </table>
-
-            {% elif team_report %}
-
-              <table id="navtable">
-                <tr><td class="navgroup">
-                  Reports:
-                </td><td>
-                  <a href="{% url 'extranet_team_weekly_meeting' team_report.team.name %}">Weekly meeting</a>
-                </td></tr>
-              </table>
-
-            {% elif team_weekly_meeting %}
-
-            {% elif coder_weekly %}
-
-            {% elif coder_monthly %}
-
-            {% elif coder %}
-
-            {% else %}
-
-              <table id="navtable">
-
-              {% if projects_for_customers %}
-                <tr><td class="navgroup">
-                  Project administration:
-                </td><td>
-                  {% for project in projects_for_customers %}
-                    <a href="{% url 'extranet_project' project.name %}">{{ project.name }}</a>
-                  {% endfor %}
-                </td></tr>
-              {% endif %}
-
-              {% if teams_for_coders %}
-                <tr><td class="navgroup">
-                  Team(s):
-                </td><td>
-                  {% for team in teams_for_coders %}
-                    <a href="{% url 'extranet_team' team.name %}">{{ team.name }}</a>
-                  {% endfor %}
-                </td></tr>
-              {% endif %}
-
-              {% if coder_report %}
-                <tr><td class="navgroup">
-                  Hour reporting:
-                </td><td>
-                  <a href="{% url 'extranet_upload_hours_as_csv' %}">Upload CSV</a>
-                  <a href="{{ coder_report.current_week_url }}">Weekly</a>
-                  <a href="{{ coder_report.current_month_url }}">Monthly</a>
-                </td></tr>
-              {% endif %}
-
-              {% if user.is_superuser %}
-                <tr><td class="navgroup">
-                  Admin:
-                </td><td>
-                  <a target="_new" href="{% url 'admin:index' %}">Index</a>
-                </td></tr>
-              {% endif %}
-
-            </table>
-
-            {% endif %}
+            {% block navbar %}{% endblock navbar %}
           </div>
           {% block content %}{% endblock content %}
         </div>

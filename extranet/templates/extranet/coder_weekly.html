@@ -5,3 +5,20 @@
 {% show_hours_report coder_weekly %}
 
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    {{ coder_weekly.coder }}
+    &#x27a3;
+    <span class="currentpage">Weekly hours</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ coder_weekly.iso_week }}
+    {{ coder_weekly.coder }}
+
+{% endblock page_title %}

@@ -5,3 +5,20 @@
     {% show_hours_report project_monthly %}
 
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    <a href="{% url 'extranet_project' project_monthly.project.name %}">{{ project_monthly.project.name }}</a>
+    &#x27a3;
+    <span class="currentpage">Monthly report</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ project_monthly.yyyy_mm }}
+    {{ project_monthly.project }}
+
+{% endblock page_title %}

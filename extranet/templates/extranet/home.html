@@ -1,3 +1,58 @@
 {% extends "extranet/base.html" %}
+
 {% block content %}
+
+
 {% endblock content %}
+
+{% block navbar %}
+
+    <table id="navtable">
+    {% if projects_for_customers %}
+        <tr><td class="navgroup">
+          Project administration:
+        </td><td>
+          {% for project in projects_for_customers %}
+            <a href="{% url 'extranet_project' project.name %}">{{ project.name }}</a>
+          {% endfor %}
+        </td></tr>
+    {% endif %}
+    {% if teams_for_coders %}
+        <tr><td class="navgroup">
+          Team(s):
+        </td><td>
+          {% for team in teams_for_coders %}
+            <a href="{% url 'extranet_team' team.name %}">{{ team.name }}</a>
+          {% endfor %}
+        </td></tr>
+    {% endif %}
+    {% if coder %}
+        <tr><td class="navgroup">
+          Hour reporting:
+        </td><td>
+          <a href="{% url 'extranet_timer' user.username %}">Track time</a>
+          <a href="{% url 'extranet_upload_hours_as_csv' user.username %}">Upload CSV</a>
+          <a href="{{ coder_report.current_week_url }}">Weekly</a>
+          <a href="{{ coder_report.current_month_url }}">Monthly</a>
+        </td></tr>
+    {% endif %}
+    {% if user.is_superuser %}
+        <tr><td class="navgroup">
+          Admin:
+        </td><td>
+          <a target="_new" href="{% url 'admin:index' %}">Index</a>
+        </td></tr>
+    {% endif %}
+    </table>
+
+{% endblock navbar %}
+
+{% block navpath %}
+
+    <span class="currentpage">{{ SITE_NAME }}</span>
+
+{% endblock navpath %}
+
+
+{% block page_title %}
+{% endblock page_title %}

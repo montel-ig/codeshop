@@ -1,0 +1,27 @@
+{% extends "extranet/base.html" %}
+
+{% block content %}
+{% endblock content %}
+
+{% block navbar %}
+
+    <table id="navtable">
+    <tr><td class="navgroup">
+      Reports:
+    </td><td>
+      <a href="{% url 'extranet_team_weekly_meeting' team_report.team.name %}">Weekly meeting</a>
+    </td></tr>
+    </table>
+
+{% endblock navbar %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    <span class="currentpage">{{ team_report.team.name }}</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+{% endblock page_title %}

@@ -1,7 +1,25 @@
 {% extends "extranet/base.html" %}
 {% load report_tags %}
+
 {% block content %}
 
     {% show_hours_report project_weekly show_project_for_other_hours=False %}
 
 {% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    <a href="{% url 'extranet_project' project_weekly.project.name %}">{{ project_weekly.project.name }}</a>
+    &#x27a3;
+    <span class="currentpage">Weekly report</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ project_weekly.iso_week }}
+    {{ project_weekly.project }}
+
+{% endblock page_title %}

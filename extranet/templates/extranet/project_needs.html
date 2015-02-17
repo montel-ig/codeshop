@@ -83,3 +83,22 @@
     </table>
 
 {% endblock content %}
+
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    <a href="{% url 'extranet_project' project_report.project.name %}">{{ project_report.project.name }}</a>
+    &#x27a3;
+    <span class="currentpage">Manage needs</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ project_report.project.name }}
+    -
+    Manage needs
+
+{% endblock page_title %}
