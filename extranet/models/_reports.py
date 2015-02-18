@@ -11,7 +11,7 @@ from isoweek import Week
 
 # this package
 from utils import HoursReporter
-from _hours import Hours
+from _coder import Hours
 
 
 # === mixins ===
@@ -103,19 +103,21 @@ class CoderReport(ReportMixin, HoursReporter):
     def current_week_url(self):
         today = date.today()
         year, week = today.isocalendar()[:2]
-        return reverse('extranet_coder_weekly', args=[self.coder.username,
+        return reverse('extranet_coder_weekly', args=[self.coder.user.username,
                                                       year, week])
 
     def current_month_url(self):
         today = date.today()
-        return reverse('extranet_coder_monthly', args=[self.coder.username,
-                                                       today.year,
-                                                       today.month])
+        return reverse('extranet_coder_monthly',
+                       args=[self.coder.user.username,
+                             today.year,
+                             today.month])
 
     # === ReportMixin methods ===
 
     def label(self):
-        return u'{} &lt;{}&gt;'.format(self.coder.username, self.coder.email)
+        return u'{} &lt;{}&gt;'.format(self.coder.user.username,
+                                       self.coder.user.email)
 
     def get_report_type(self):
         return 'coder'
@@ -131,18 +133,18 @@ class CoderWeekly(CoderReport, WeeklyMixin):
 
     def prev_url(self):
         prev = self.iso_week - 1
-        return reverse('extranet_coder_weekly', args=(self.coder.username,
+        return reverse('extranet_coder_weekly', args=(self.coder.user.username,
                                                       prev.year, prev.week))
 
     def next_url(self):
         next = self.iso_week + 1
-        return reverse('extranet_coder_weekly', args=(self.coder.username,
+        return reverse('extranet_coder_weekly', args=(self.coder.user.username,
                                                       next.year, next.week))
 
     # === HoursReporter methods ===
 
     def iter_hours(self):
-        for hours in self.coder.hours_set.filter(
+        for hours in self.coder.user.hours_set.filter(
                 date__gte=self.start_date(),
                 date__lte=self.end_date(),
         ):
@@ -162,7 +164,7 @@ class CoderMonthly(CoderReport, MonthlyMixin):
         '''
         Also take a look at HoursReporter.iter_hours and the related functions.
         '''
-        for hours in self.coder.hours_set.filter(
+        for hours in self.coder.user.hours_set.filter(
                 date__year=self.year,
                 date__month=self.month,
         ):
@@ -172,13 +174,13 @@ class CoderMonthly(CoderReport, MonthlyMixin):
 
     def prev_url(self):
         year, month = self.prev_month()
-        return reverse('extranet_coder_monthly', args=(self.coder.username,
-                                                       year, month))
+        return reverse('extranet_coder_monthly',
+                       args=(self.coder.user.username, year, month))
 
     def next_url(self):
         year, month = self.next_month()
-        return reverse('extranet_coder_monthly', args=(self.coder.username,
-                                                       year, month))
+        return reverse('extranet_coder_monthly',
+                       args=(self.coder.user.username, year, month))
 
 
 # === reports for projects ===
@@ -214,12 +216,6 @@ class ProjectReport(ReportMixin, HoursReporter):
             for ym in range(ym_start, ym_end + 1):
                 y, m = divmod(ym, 12)
                 yield ProjectMonthly(self, y, m + 1)
-
-    def iter_needs_with_open_issues(self):
-        for need in self.project.need_set.all():
-            issues = need.issue_set.filter(closed_at=None)
-            if issues:
-                yield need, issues
 
     # === ReportMixin methods ===
 

@@ -1,9 +1,10 @@
 # python
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 # django
 from django.conf import settings
 from django.db import models
+from django.utils import timezone
 
 # 3rd party
 from github import Github
@@ -33,7 +34,7 @@ class Syncable(models.Model):
         timestamp, to make sure no updates are lost because of timezone
         differences or other peculiarities.
         '''
-        self.synced_at = datetime.now() - timedelta(1)
+        self.synced_at = timezone.now() - timedelta(1)
         if save:
             self.save()
 
@@ -44,9 +45,9 @@ class RepositoryManager(models.Manager):
     def try_to_get_by_name(self, name):
         if name:
             if '/' in name:
-                org_name, repo_name = name.split('/')
-                return Repository.objects.get(organization__name=org_name,
-                                              name=name)
+                org_login, repo_name = name.split('/')
+                return Repository.objects.get(organization__login=org_login,
+                                              name=repo_name)
             else:
                 return Repository.objects.get(name=name)
 

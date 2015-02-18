@@ -3,7 +3,8 @@
 body {
 	background-color: #eee;
 	font: 14px Arial;
-    padding: 35px;
+    padding: 0px;
+    padding-bottom: 70px;
 }
 h1, h2, h3, h4, h5, h6 { 
 	font-family: Helvetica, Arial, sans-serif;
@@ -35,6 +36,9 @@ a:hover { text-decoration: underline; }
     padding-right: 0.5em;
     padding-top: 0.2em;
     padding-bottom: 0.2em;
+}
+.loginlogout {
+    background-color: gray;
 }
 #bottomdefaults {
     font-size: 10px;
@@ -344,4 +348,90 @@ table#weekly-meeting .this-week {
 }
 #weekly-meeting #report {
     font-size: 80%;
+}
+#timer form, #timer form input {
+    display: inline
+}
+#timer .bottom {
+    padding: 0.5em;
+    max-width: 32em;
+    line-height: 1.2em;
+}
+#timer textarea {
+    width: 100%;
+    height: 4em;
+}
+#timer .comment {
+    margin-top: 1em;
+    padding: 1em;
+    border-top: 1px solid silver;
+}
+#timer .alert {
+    border-top: 3px solid #ff7f0e;
+    border-left: 3px solid #ff7f0e;
+}
+#timer .info h3 {
+    line-height: 1em;
+}
+#timer .info td {
+    padding: 0.2em;
+    padding-left: 0.2em;
+    padding-right: 0.2em;
+}
+#timer .info .label {
+    vertical-align: top;
+    width: 7em;
+    text-align: right;
+}
+#timer .info .box {
+    min-width: 6em;
+    text-align: center;
+    border: 1px solid gray;
+    background-color: black;
+    color: white;
+    font-family: monospace;
+}
+#timer .info table {
+    width: 100%;
+}
+#timer .info {
+    width: 100%;
+    margin-top: 2em;
+    border: 1px solid silver;
+    border-radius: 10px;
+    padding: 1em;
+    max-width: 32em;
+    background-color: silver;
+    color: black;
+}
+#timer .info h3 {
+    color: white;
+    line-height: 1.5em;
+    border-bottom: 1px solid white;
+    margin-top: 0;
+}
+#timer .billable {
+    background-color: lightgreen !important;
+    color: black !important;
+}
+#timer .billable.pending {
+    background-color: yellow !important;
+    color: black !important;
+}
+#timer #stop, #timer #update, #timer #commit {
+    font-size: 1.2em;
+}
+#timer #delete {
+    margin-top: 4em;
+}
+#timer .legend {
+    vertical-align: top;
+    font-size: 10px;
+    color: gray;
+}
+#timer .csv input {
+    background-color: black;
+    color: gray;
+    font-family: monospace;
+    width: 100%;
 }

@@ -7,19 +7,18 @@ urlpatterns = patterns(
     url(r'^$', 'extranet.views.home', name='extranet_home'),
 
     # === coder ===
+    url(r'(.+)/timer/$', 'extranet.views.coder.timer',
+        name='extranet_timer'),
     url(r'^hours/(.+)/(\d+)/W(\d+)/$', 'extranet.views.coder.weekly',
         name='extranet_coder_weekly'),
     url(r'^hours/(.+)/(\d+)/(\d+)/$', 'extranet.views.coder.monthly',
         name='extranet_coder_monthly'),
     url(r'^hours/(.+)/$', 'extranet.views.coder.upload_hours_as_csv',
         name='extranet_upload_hours_as_csv'),
-    url(r'^hours/$', 'extranet.views.coder.upload_hours_as_csv',
-        name='extranet_upload_hours_as_csv'),
 
     # === team ===
     url(r'^team/(.*)/meeting/$', 'extranet.views.team.weekly_meeting',
         name='extranet_team_weekly_meeting'),
-    url(r'^team/(.*)/$', 'extranet.views.team.home', name='extranet_team'),
 
     # === customer ===
     url(r'^(.*)/(\d+)/W(\d+)/$', 'extranet.views.project.weekly',

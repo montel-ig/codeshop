@@ -1,0 +1,231 @@
+{% extends "extranet/base.html" %}
+{% load tz %}
+
+{% block content %}
+<div id="timer">
+
+    {% if timer.start_time %}
+        <div class="info">
+
+        {% if timer.issue %}
+            <h3>{{ timer.issue.title }}</h3>
+        {% endif %}
+
+        <table>
+            <tr><td class="label">
+                Start:
+            </td><td class="box">{{ timer.start_time|time:"H:i"}}</td><td>
+                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                    <input type="hidden" name="do" value="incr_start" />
+                    {% csrf_token %}
+                    <input type="submit" value="+" />
+                </form>
+                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                    <input type="hidden" name="do" value="decr_start" />
+                    {% csrf_token %}
+                    <input type="submit" value="-" />
+                </form>
+            </td><tr>
+
+            <tr><td class="label">
+                End:
+            </td><td class="box">
+                <span>{{ timer.get_end_time|time:"H:i"}}</span>
+            </td><td>
+                {% if timer.end_time %}
+                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                    <input type="hidden" name="do" value="incr_end" />
+                    {% csrf_token %}
+                    <input type="submit" value="+" />
+                </form>
+                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                    <input type="hidden" name="do" value="decr_end" />
+                    {% csrf_token %}
+                    <input type="submit" value="-" />
+                </form>
+                {% else %}
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="stop" />
+                        {% csrf_token %}
+                        <input id="stop" type="submit" value="Stop timer" />
+                    </form>
+                {% endif %}
+            </td><tr>
+
+            <tr><td class="label">
+                Time spent:
+            </td><td class="box">
+                 {{ timer.calculate_amount_absolute_hhmmss }}
+            </td><td>
+            </td><tr>
+
+            <tr><td class="label">
+                Billable hours:
+            </td><td class="box billable{% if not timer.is_ready %} pending{% endif %}">
+                {% if timer.amount != None %}
+                    {{ timer.amount|floatformat:2 }}h
+                {% else %}
+                    TBA
+                {% endif %}
+            </td><td>
+                {% if timer.amount != None %}
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="incr_amount" />
+                        {% csrf_token %}
+                        <input type="submit" value="+" />
+                    </form>
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="decr_amount" />
+                        {% csrf_token %}
+                        <input type="submit" value="-" />
+                    </form>
+                {% endif %}
+            </td><tr>
+
+            <tr><td class="label">
+                    Tags:
+            </td><td colspan="2">
+                {% for hour_tag in timer.tags.all %}
+                        <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                            <input type="hidden" name="do" value="deltag" />
+                            <input type="hidden" name="tag" value="{{ hour_tag.name }}" />
+                            {% csrf_token %}
+                            <input type="submit" value="{{ hour_tag }}" />
+                        </form>
+                {% endfor %}
+                {% if timer.get_available_tags and not timer.tags.all %}
+                    <div class="tags alert">
+                            Please, add at least one tag before committing the hours:
+                            <p>
+                        {% for hour_tag in timer.get_available_tags %}
+                            <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                                <input type="hidden" name="do" value="tag" />
+                                <input type="hidden" name="tag" value="{{ hour_tag.name }}" />
+                                {% csrf_token %}
+                                <input type="submit" value="{{ hour_tag }}" />
+                            </form>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </td><tr>
+
+            <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                <tr><td class="label">
+                    Comment:
+                </td><td colspan="2">
+                    {% if timer.end_time and timer.tags.all %}
+                        <input type="hidden" name="do" value="commit" />
+                    {% else %}
+                        <input type="hidden" name="do" value="comment" />
+                    {% endif %}
+                    {% csrf_token %}
+                    <textarea name="comment">{{ timer.comment|default_if_none:'' }}</textarea>
+                </td><tr>
+
+                <tr><td class="label">
+                </td><td colspan="2">
+                    {% if timer.end_time and timer.tags.all %}
+                        <input type="submit" id="commit" value="Submit hours" />
+                    {% else %}
+                        <input type="submit" id="update" value="Update comment" /> <span class="legend">(*)</span>
+                    {% endif %}
+                </td><tr>
+            </form>
+
+            <tr><td class="label">
+                    CSV:
+            </td><td colspan="2" class="csv">
+                <input type="text" value="{{ timer.as_scsv }}" />
+            </td><tr>
+
+
+            <tr><td class="label">
+            </td><td colspan="2">
+            </td><tr>
+        </table>
+
+        </div>
+
+        <div class="bottom">
+        <p class="legend">
+        {% if not timer.end_time or not timer.tags.all %}
+            (*) The current timer data and the comment field are attached to
+            your profile and also saved in db. This means that it should be
+            safe for you to eg. log out and reboot your computer, even before
+            submitting the hours. The pre-filled data should be waiting for you
+            here at the site once you come back.
+        {% endif %}
+        </p>
+        <div>
+        {% if timer.get_available_tags %}
+                Available tags:
+                {% for hour_tag in timer.get_available_tags %}
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="tag" />
+                        <input type="hidden" name="tag" value="{{ hour_tag.name }}" />
+                        {% csrf_token %}
+                        <input type="submit" value="{{ hour_tag }}" />
+                    </form>
+                {% endfor %}
+        {% endif %}
+        </div>
+        <p id="delete">
+            <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                <input type="hidden" name="do" value="delete" />
+                {% csrf_token %}
+                If you want to start from scratch,
+                you could also 
+                <input type="submit" value="delete" />
+                your timer data right now.
+                But please note that there's no undo for this.
+            </form>
+        </div>
+
+
+    {% else %}
+
+        <li>Click to start tracking:
+        <ul>
+        {% for project in coder.projects %}
+            <li>{{ project }}
+            {% for need, issues in project.iter_needs_with_open_issues %}
+            <ul>
+                {% for issue in issues %}
+                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                    <input type="hidden" name="do" value="start" />
+                    <input type="hidden" name="issue_id" value="{{ issue.id }}" />
+                    <li>
+                        {% csrf_token %}
+                        <input type="submit" value="Start" />
+                        {{ issue.title }}
+                    </li>
+                </form>
+                {% endfor %}
+            </ul>
+            </li>
+            {% endfor %}
+        {% endfor %}
+        </ul>
+
+    {% endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    {{ coder }}
+    &#x27a3;
+    <span class="currentpage">Track time</span>
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    Track time
+
+{% endblock page_title %}
+

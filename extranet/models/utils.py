@@ -1,9 +1,24 @@
 # python
 from collections import defaultdict
+from datetime import timedelta
 from decimal import Decimal
 
 # django
 from django.db import models
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.utils import timezone
+
+# 3rd party
+import pytz
+
+
+def round_datetime(dt, resolution=60 * 15):
+    dt = dt.replace(tzinfo=None)  # make naive
+    seconds = (dt - dt.min).seconds
+    rounding = (seconds + resolution / 2) // resolution * resolution
+    ret = dt + timedelta(0, rounding - seconds, -dt.microsecond)
+    return timezone.localtime(ret.replace(tzinfo=pytz.UTC))
 
 
 class HoursReporter(object):
@@ -47,10 +62,14 @@ class HoursReporter(object):
 
 
 class Nameable(models.Model):
-    name = models.CharField(max_length=200, unique=True)
+    name = models.CharField(max_length=200, unique=True, blank=False)
 
     class Meta:
         abstract = True
 
     def __unicode__(self):
         return self.name
+
+    def clean(self):
+        if self.name == '':
+            raise ValidationError('Name is required')

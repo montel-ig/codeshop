@@ -67,7 +67,7 @@ def home(request, project):
     d = dict(
         project_report=ProjectReport(project),
     )
-    return render(request, 'extranet/base.html', d)
+    return render(request, 'extranet/project_home.html', d)
 
 
 @login_required

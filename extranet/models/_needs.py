@@ -14,12 +14,15 @@ class Project(Nameable, HoursReporter):
     def get_absolute_url(self):
         return reverse('extranet_project', args=[self.name])
 
-    def is_coder_team_member(self, user):
-        return user in self.coder_team.user_set.all()
-
     def iter_hours(self):
         for hours in self.hours_set.all():
             yield hours
+
+    def iter_needs_with_open_issues(self):
+        for need in self.need_set.all():
+            issues = need.issue_set.filter(closed_at=None)
+            if issues:
+                yield need, issues
 
     def latest_need(self):
         return self.need_set.order_by('-created_at').first()

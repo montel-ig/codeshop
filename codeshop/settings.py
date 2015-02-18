@@ -7,15 +7,16 @@ https://docs.djangoproject.com/en/1.7/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.7/ref/settings/
 """
+from decimal import Decimal
 
 
 # === util for getting custom settings ===
-def custom(key):
+def custom(key, default=None):
     try:
         custom = __import__('custom_settings')
         return getattr(custom, key)
     except:
-        return None
+        return default
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -84,13 +85,12 @@ DATABASES = {
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
-
 USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = False
+USE_TZ = True
+TIME_ZONE = custom('TIME_ZONE', 'UTC')
 
 
 # Static files (CSS, JavaScript, Images)
@@ -137,3 +137,9 @@ SERVER_EMAIL = custom('SERVER_EMAIL')
 
 # === GLOBAL SETTINGS ===
 SITE_NAME = custom('SITE_NAME') or 'My Codeshop'
+
+
+# === time tracker ===
+TIMER_STEPS = Decimal('4.0')  # th of 1h
+TIMER_STEP_SIZE = int(Decimal('1.0') / TIMER_STEPS * 3600)
+TIMER_HEADROOM = Decimal('12.0')  # th of 1h

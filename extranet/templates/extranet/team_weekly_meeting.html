@@ -24,7 +24,7 @@
         <td class="week">
 
             <table id="report">
-            {% for need, issues in lwpr.iter_needs_with_open_issues %}
+            {% for need, issues in lwpr.project.iter_needs_with_open_issues %}
 
               <tr class="need"><td colspan="3">
                  <b>{{ need }}</b>
@@ -67,7 +67,7 @@
 
     <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
     &#x27a3;
-    <a href="{% url 'extranet_team' team_weekly_meeting.team.name %}">{{ team_weekly_meeting.team.name }}</a>
+    {{ team_weekly_meeting.team.name }}
     &#x27a3;
     <span class="currentpage">Weekly meeting</span>
 

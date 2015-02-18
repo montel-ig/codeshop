@@ -3,16 +3,26 @@ from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
 from models import (Project, Need, Organization, Repository, Issue, Hours,
-                    HourTag)
+                    HourTag, Timer)
 
 
 # === patch & reload User/UserAdmin ===
+class TimerInline(admin.StackedInline):
+    model = Timer 
+    can_delete = True 
+    verbose_name_plural = 'timer'
+
+# Re-register UserAdmin
+admin.site.unregister(User)
+admin.site.register(User, UserAdmin)
 
 User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
 User.user_hours = lambda x: sum(h.amount for h in x.hours_set.all())
 
-UserAdmin.list_display = (u'username', 'email', u'user_hours', u'groups_string',
-                          u'is_staff')
+class UserAdmin(UserAdmin):
+    inlines = (TimerInline,)
+    list_display = (u'username', 'email', u'user_hours', u'groups_string',
+                    u'is_staff')
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)

@@ -7,8 +7,8 @@ import time
 from decimal import Decimal
 
 # django
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 
 # extranet
 
@@ -42,6 +42,16 @@ def parse_time(x, time_formats):
             pass
 
 
+# === exceptions ===
+
+class AtLeastOneTagRequired(Exception):
+    pass
+
+
+class NoCoderProjects(Exception):
+    pass
+
+
 # === managers ===
 
 class HoursManager(models.Manager):
@@ -52,14 +62,15 @@ class HoursManager(models.Manager):
     def _csv_parse(self, row, coder=None):
 
         if not coder:
-            cdr, proj, date, strt, end, hrs, tags, repo, iss, comment = row
-            coder = User.objects.get(username=cdr)
+            usr, proj, date, strt, end, hrs, tags, repo, iss, comment = row
+            coder = Coder.get(username=usr)
         else:
             proj, date, strt, end, hrs, tags, repo, iss, comment = row
 
         # === tags ===
-        tags = [x.strip().lower() for x in tags.split(',')]
-        assert(tags)
+        tags = filter(None, [x.strip().lower() for x in tags.split(',')])
+        if not tags:
+            raise AtLeastOneTagRequired()
 
         # === repository and issue ===
         repository = Repository.objects.try_to_get_by_name(repo)
@@ -80,7 +91,7 @@ class HoursManager(models.Manager):
             project=project,
             date=datetime.datetime.strptime(date, self.DATE_FORMAT).date(),
             amount=Decimal(hrs),
-            coder=coder,
+            coder=coder.user,
             repository=repository,
             issue=issue,
             start_time=parse_time(strt, self.TIME_FORMATS),
@@ -88,7 +99,7 @@ class HoursManager(models.Manager):
             comment=comment,
             input_data_json=json.dumps(row)
         )
-        assert project.is_coder_team_member(coder), u'Not allowed'
+        assert project in coder.projects, u'Not allowed'
 
         # don't save yet!
 
@@ -111,7 +122,7 @@ class HoursManager(models.Manager):
             u','.join(tags),
             obj.repository.get_distinct_name() if obj.repository else '',
             obj.issue.number if obj.issue else '',
-            obj.comment,
+            obj.comment or '',
         ]
 
         # === dump to csv ===
@@ -131,6 +142,7 @@ class HoursManager(models.Manager):
     def csv_get_or_create(self, row, coder=None):
 
         parsed = self._csv_parse(row, coder=coder)
+        assert(parsed._tags_to_be)
 
         # get unique object
         q = dict((key, getattr(parsed, key)) for key in HOURS_IDENTITY_FIELDS)
@@ -169,6 +181,8 @@ class Hours(models.Model):
     project = models.ForeignKey(Project)
     date = models.DateField()
     amount = models.DecimalField(max_digits=4, decimal_places=2)
+
+    # special, at least one required
     tags = models.ManyToManyField(HourTag)
 
     # optional
@@ -224,5 +238,33 @@ class Hours(models.Model):
         except Hours.DoesNotExist:
             obj = None
         return obj is not None
-            
 
+
+class Coder:
+    def __init__(self, user):
+        self.user = user
+
+        self.projects = list(self._iter_projects())
+        if not self.projects:
+            # for now, a coder should have projects, always
+            raise NoCoderProjects()
+
+    def __unicode__(self):
+        return self.user.username
+
+    def _iter_projects(self):
+        for group in self.user.groups.all():
+            for project in group.customer_projects.all():
+                yield project
+
+    @staticmethod
+    def get(*args, **kwargs):
+        user = User.objects.get(*args, **kwargs)
+        return Coder(user)
+
+    @staticmethod
+    def get_or_none(*args, **kwargs):
+        try:
+            return Coder.get(*args, **kwargs)
+        except NoCoderProjects:
+            return None

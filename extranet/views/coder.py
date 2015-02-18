@@ -4,52 +4,42 @@ import csv
 # django
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 from django.http import Http404
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+
+from django.conf import settings
+from django.utils import timezone
 
 # 3rd party
 from isoweek import Week
 
 # extranet
 import forms
-from extranet.models import Hours, CoderWeekly, CoderMonthly
+from extranet.models import (Hours, CoderWeekly, CoderMonthly, Coder, Issue,
+                             Timer)
 
 
 # === utils ===
 
 def get_coder(func):
-    def wrapper(request, username=None):
-        if username:
-            coder = get_object_or_404(User, username=username)
-            if (not request.user.is_superuser) and (request.user != coder):
-                raise Http404()
-        else:
-            coder = request.user
-        return func(request, coder)
+    def wrapper(request, username, *args, **kwargs):
+        user = get_object_or_404(User, username=username)
+        if (not request.user.is_superuser) and (request.user != user):
+            raise Http404()
+        return func(request, Coder(user), *args, **kwargs)
     return wrapper
 
 
 def get_weekly_obj(func):
-    def wrapper(request, username, year, week):
-        if username:
-            coder = get_object_or_404(User, username=username)
-            if (not request.user.is_superuser) and (request.user != coder):
-                raise Http404()
-        else:
-            coder = request.user
+    def wrapper(request, coder, year, week):
         weekly = CoderWeekly(coder, Week(int(year), int(week)))
         return func(request, weekly)
     return wrapper
 
 
 def get_monthly_obj(func):
-    def wrapper(request, username, year, month):
-        if username:
-            coder = get_object_or_404(User, username=username)
-            if (not request.user.is_superuser) and (request.user != coder):
-                raise Http404()
-        else:
-            coder = request.user
+    def wrapper(request, coder, year, month):
         monthly = CoderMonthly(coder, int(year), int(month))
         return func(request, monthly)
     return wrapper
@@ -58,6 +48,7 @@ def get_monthly_obj(func):
 # === views ===
 
 @login_required
+@get_coder
 @get_weekly_obj
 def weekly(request, weekly):
     d = dict(
@@ -67,6 +58,7 @@ def weekly(request, weekly):
 
 
 @login_required
+@get_coder
 @get_monthly_obj
 def monthly(request, monthly):
     d = dict(
@@ -121,11 +113,6 @@ def upload_hours_as_csv(request, coder):
     else:
         form = forms.HoursUploadForm()
 
-    def iter_customer_projects():
-        for group in coder.groups.all():
-            for project in group.customer_projects.all():
-                yield project
-
     d = dict(
         coder=coder,
         form=form,
@@ -133,7 +120,55 @@ def upload_hours_as_csv(request, coder):
         valid_objs=valid_objs,
         existing_objs=existing_objs,
         created_objs=created_objs,
-        customer_projects=set(iter_customer_projects()),
     )
 
     return render(request, 'extranet/upload_hours_as_csv.html', d)
+
+
+@login_required
+@get_coder
+def timer(request, coder):
+    obj, created = Timer.objects.get_or_create(coder=coder.user)
+
+    if request.method == 'POST':
+        timer = coder.user.timer
+        do = request.POST.get('do', None)
+        if do == 'start':
+            obj.start_issue(Issue.objects.get(pk=request.POST.get('issue_id')))
+        elif do == 'tag':
+            timer.add_tag(request.POST.get('tag'))
+        elif do == 'deltag':
+            timer.del_tag(request.POST.get('tag'))
+        elif do == 'stop':
+            timer.stop()
+
+        # times
+        elif do == 'incr_start':
+            timer.increase_start()
+        elif do == 'decr_start':
+            timer.decrease_start()
+        elif do == 'incr_end':
+            timer.increase_end()
+        elif do == 'decr_end':
+            timer.decrease_end()
+
+        # amount
+        elif do == 'incr_amount':
+            timer.increase_amount()
+        elif do == 'decr_amount':
+            timer.decrease_amount()
+        elif do == 'comment':
+            timer.comment = request.POST.get('comment')
+            timer.save()
+        elif do == 'commit':
+            timer.comment = request.POST.get('comment')
+            timer.save_values()
+            timer.delete()
+        elif do == 'delete':
+            timer.delete()
+        return redirect(reverse('extranet_timer', args=[coder.user.username]))
+
+    timezone.activate(settings.TIME_ZONE)
+
+    d = dict(coder=coder, timer=obj)
+    return render(request, 'extranet/timer.html', d)

@@ -1,5 +1,3 @@
-# python
-from datetime import date
 # django
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import Group
@@ -7,7 +5,7 @@ from django.http import Http404
 from django.shortcuts import render, get_object_or_404
 
 # extranet
-from extranet.models import TeamReport, TeamWeeklyMeeting
+from extranet.models import TeamWeeklyMeeting
 
 
 # === utils ===
@@ -33,12 +31,3 @@ def weekly_meeting(request, team):
         team_weekly_meeting=TeamWeeklyMeeting(team),
     )
     return render(request, 'extranet/team_weekly_meeting.html', d)
-
-
-@login_required
-@get_team
-def home(request, team):
-    d = dict(
-        team_report=TeamReport(team),
-    )
-    return render(request, 'extranet/base.html', d)

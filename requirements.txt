@@ -4,3 +4,4 @@ PyGithub
 pyyaml
 django-social-auth
 isoweek
+pytz

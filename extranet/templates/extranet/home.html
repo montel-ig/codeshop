@@ -10,7 +10,7 @@
     <table id="navtable">
     {% if projects_for_customers %}
         <tr><td class="navgroup">
-          Project administration:
+          Project(s):
         </td><td>
           {% for project in projects_for_customers %}
             <a href="{% url 'extranet_project' project.name %}">{{ project.name }}</a>
@@ -22,13 +22,13 @@
           Team(s):
         </td><td>
           {% for team in teams_for_coders %}
-            <a href="{% url 'extranet_team' team.name %}">{{ team.name }}</a>
+            <a href="{% url 'extranet_team_weekly_meeting' team.name %}">{{ team.name }}</a>
           {% endfor %}
         </td></tr>
     {% endif %}
     {% if coder %}
         <tr><td class="navgroup">
-          Hour reporting:
+          Hours:
         </td><td>
           <a href="{% url 'extranet_timer' user.username %}">Track time</a>
           <a href="{% url 'extranet_upload_hours_as_csv' user.username %}">Upload CSV</a>
