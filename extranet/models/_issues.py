@@ -171,11 +171,15 @@ class Issue(Syncable, HoursReporter):
         self._update_sync_timestamp(save=False)
         self.save()
 
-    def try_to_get_project(self):
-        return (self.need.project
-                if self.need
-                else self.repository.default_project)
+    def get_distinct_name(self):
+        return u'{}#{}'.format(self.repository.get_distinct_name(),
+                               self.number)
 
     def iter_hours(self):
         for hours in self.hours_set.all():
             yield hours
+
+    def try_to_get_project(self):
+        return (self.need.project
+                if self.need
+                else self.repository.default_project)

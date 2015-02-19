@@ -8,7 +8,7 @@
         <div class="info">
 
         {% if timer.issue %}
-            <h3>{{ timer.issue.title }}</h3>
+            <h3>{{ timer.issue.title }} [{{ timer.issue.get_distinct_name }}]</h3>
         {% endif %}
 
         <table>
@@ -30,7 +30,13 @@
             <tr><td class="label">
                 End:
             </td><td class="box">
-                <span>{{ timer.get_end_time|time:"H:i"}}</span>
+                <span>
+                    {% if timer.end_time %}
+                        {{ timer.end_time|time:"H:i"}}
+                    {% else %}
+                        &#8987;
+                    {% endif %}
+                </span>
             </td><td>
                 {% if timer.end_time %}
                 <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
