@@ -152,7 +152,7 @@ td.navgroup {
 #report .issue .coder {
     text-align: right;
 }
-#report .issue .coder span {
+#report .issue .coder span , #timer .coder{
     background-color: gray; 
     color: white;
 
@@ -434,4 +434,19 @@ table#weekly-meeting .this-week {
     color: gray;
     font-family: monospace;
     width: 100%;
+}
+#timer #issues {
+    padding: 2em;
+    width:  100%;
+}
+#timer #issues td {
+    vertical-align: top;
+    line-height: 1em;
+    padding-bottom: 1em;
+    padding-right: 1em;
+    color: gray;
+}
+#timer .coder {
+    background-color: silver;
+    color: white;
 }

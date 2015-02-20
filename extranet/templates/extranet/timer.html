@@ -190,28 +190,48 @@
 
     {% else %}
 
-        <li>Click to start tracking:
-        <ul>
+        <table id="issues">
         {% for project in coder.projects %}
-            <li>{{ project }}
+            <tr><td colspan="4"><h3>{{ project }}</h3></td</tr>
             {% for need, issues in project.iter_needs_with_open_issues %}
-            <ul>
                 {% for issue in issues %}
-                <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
-                    <input type="hidden" name="do" value="start" />
-                    <input type="hidden" name="issue_id" value="{{ issue.id }}" />
-                    <li>
+                <tr><td>
+                    {% if issue.assignee_login %}
+                        <span class="coder">{{ issue.assignee_login }}</span>
+                    {% endif %}
+                </td><td>
+                    {{ need.name }}
+                </td><td>
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="start" />
+                        <input type="hidden" name="issue_id" value="{{ issue.id }}" />
                         {% csrf_token %}
                         <input type="submit" value="Start" />
-                        {{ issue.title }}
-                    </li>
-                </form>
+                    </form>
+                </td><td>
+                    {{ issue.title }}
+                </td></tr>
                 {% endfor %}
-            </ul>
-            </li>
+            {% endfor %}
+            {% for issue in project.iter_open_issues_with_no_related_need %}
+                <tr><td>
+                    {% if issue.assignee_login %}
+                        <span class="coder">{{ issue.assignee_login }}</span>
+                    {% endif %}
+                </td><td>
+                </td><td>
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="start" />
+                        <input type="hidden" name="issue_id" value="{{ issue.id }}" />
+                        {% csrf_token %}
+                        <input type="submit" value="Start" />
+                    </form>
+                </td><td>
+                    {{ issue.title }}
+                </td></tr>
             {% endfor %}
         {% endfor %}
-        </ul>
+        </table>
 
     {% endif %}
 

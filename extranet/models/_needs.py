@@ -24,6 +24,11 @@ class Project(Nameable, HoursReporter):
             if issues:
                 yield need, issues
 
+    def iter_open_issues_with_no_related_need(self):
+        for repository in self.repository_set.all():
+            for issue in repository.issue_set.filter(closed_at=None):
+                yield issue
+
     def latest_need(self):
         return self.need_set.order_by('-created_at').first()
 
