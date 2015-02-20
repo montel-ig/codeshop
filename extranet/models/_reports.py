@@ -24,6 +24,9 @@ class ReportMixin:
     def get_report_type(self):
         raise NotImplementedError()
 
+    def get_csv_link(self):
+        raise NotImplementedError()
+
 
 class TimeNavMixin:
 
@@ -157,6 +160,11 @@ class CoderMonthly(CoderReport, MonthlyMixin):
         self.coder = coder
         self.year = year
         self.month = month
+
+    # === ReportMixin methods ===
+    def get_csv_link(self):
+        return reverse('extranet_coder_monthly_csv',
+                       args=(self.coder.user.username, self.year, self.month))
 
     # === HoursReporter methods ===
 

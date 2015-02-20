@@ -27,7 +27,12 @@
     </tr>
     <tr class="header">
       <td class="name">Hours:</td>
-      <td>{{ report.total_hours }} h</td>
+      <td>{{ report.total_hours }} h
+        {% if link_to_csv %}
+          &nbsp;
+          <a href="{{ report.get_csv_link }}">[export as csv]</a>
+        {% endif %}
+      </td>
       <td></td>
     </tr>
   {% endif %}
