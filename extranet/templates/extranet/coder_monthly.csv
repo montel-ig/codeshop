@@ -1,0 +1,1 @@
+{% for hours in coder_monthly.iter_hours %}{{ hours.as_scsv_without_coder }}{% endfor %}

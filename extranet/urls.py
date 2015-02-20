@@ -13,6 +13,8 @@ urlpatterns = patterns(
         name='extranet_coder_weekly'),
     url(r'^hours/(.+)/(\d+)/(\d+)/$', 'extranet.views.coder.monthly',
         name='extranet_coder_monthly'),
+    url(r'^hours/(.+)/(\d+)/(\d+)/csv/$', 'extranet.views.coder.monthly_csv',
+        name='extranet_coder_monthly_csv'),
     url(r'^hours/(.+)/$', 'extranet.views.coder.upload_hours_as_csv',
         name='extranet_upload_hours_as_csv'),
 

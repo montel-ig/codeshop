@@ -167,7 +167,7 @@ class CoderMonthly(CoderReport, MonthlyMixin):
         for hours in self.coder.user.hours_set.filter(
                 date__year=self.year,
                 date__month=self.month,
-        ):
+        ).order_by('date', 'start_time'):
             yield hours
 
     # === MonthlyMixin/TimeNavMixin methods ===

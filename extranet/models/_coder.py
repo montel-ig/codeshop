@@ -107,13 +107,13 @@ class HoursManager(models.Manager):
 
         return obj
 
-    def csv_dump(self, obj):
+    def csv_dump(self, obj, omit_coder=False):
 
         # === prepare values ===
         frmt_time = lambda t: t.strftime(self.TIME_FORMATS[0]) if t else ''
         tags = [t.name for t in obj.tags.all()] if obj.pk else obj._tags_to_be
-        values = [
-            obj.coder.username,
+        values = [] if omit_coder else [obj.coder.username]
+        values += [
             obj.project.name if obj.project else '',
             obj.date.strftime(self.DATE_FORMAT),
             frmt_time(obj.start_time),
@@ -227,6 +227,10 @@ class Hours(models.Model):
     def as_scsv(self):
         ''' semicolon-separated values '''
         return Hours.objects.csv_dump(self)
+
+    def as_scsv_without_coder(self):
+        ''' semicolon-separated values '''
+        return Hours.objects.csv_dump(self, omit_coder=True)
 
     def similar_row_exists(self):
         ''' can be used eg. when parsing new hours from CSV files '''

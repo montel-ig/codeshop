@@ -69,6 +69,21 @@ def monthly(request, monthly):
 
 @login_required
 @get_coder
+@get_monthly_obj
+def monthly_csv(request, monthly):
+    d = dict(
+        coder_monthly=monthly,
+    )
+    response = render(request, 'extranet/coder_monthly.csv', d,
+                      content_type='text/csv')
+    fn = u'{}-{}-hours-{}.csv'.format(monthly.year, monthly.month,
+                                      monthly.coder.user.username)
+    response['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
+    return response
+
+
+@login_required
+@get_coder
 def upload_hours_as_csv(request, coder):
     _valid_rows, failed_rows = [], []
     valid_objs, created_objs, existing_objs = [], [], []
@@ -86,6 +101,8 @@ def upload_hours_as_csv(request, coder):
                               delimiter=str(form.cleaned_data['delimiter']),
                               quotechar='"')
             for row in rows:
+                if not row:
+                    continue
                 try:
                     obj = Hours.objects._csv_parse(row, coder=coder)
                 except Exception, e:
