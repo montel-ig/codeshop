@@ -76,7 +76,7 @@ def monthly_csv(request, monthly):
     )
     response = render(request, 'extranet/coder_monthly.csv', d,
                       content_type='text/csv')
-    fn = u'{}-{}-hours-{}.csv'.format(monthly.year, monthly.month,
+    fn = u'{}-{:02d}-hours-{}.csv'.format(monthly.year, monthly.month,
                                       monthly.coder.user.username)
     response['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
     return response
