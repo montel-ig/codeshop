@@ -179,6 +179,10 @@ class Issue(Syncable, HoursReporter):
         for hours in self.hours_set.all():
             yield hours
 
+    def hours_left(self):
+        if self.estimated_hours:
+            return self.estimated_hours - self.total_hours()
+
     def try_to_get_project(self):
         return (self.need.project
                 if self.need

@@ -16,6 +16,20 @@
                 {% endif %}
             {% endif %}
         </h3>
+        <div id="estimate">
+            {% if timer.issue and timer.issue.estimated_hours %}
+                Estimate:
+                <span class="node work">{{ timer.issue.estimated_hours }} h</span>
+                Used:
+                <span class="node work">
+                    {{ timer.issue.total_hours }} h
+                </span>
+                Hours left:
+                <span class="node work">
+                    {{ timer.issue.hours_left }} h</td><td>
+                </span>
+            {% endif %}
+        </div>
         <table>
             <tr><td class="label">
                 Start:
@@ -225,7 +239,7 @@
                 </td><td class="hours">
                     {% if issue.total_hours or issue.estimated_hours %}
                     <span class="work node">
-                    {{ issue.total_hours|floatformat:1 }}{% if issue.estimated_hours %} / {{ issue.estimated_hours|floatformat:1 }}{% endif %} h
+                    {{ issue.total_hours|floatformat:2 }}{% if issue.estimated_hours %} / {{ issue.estimated_hours }}{% endif %} h
                     </span>
                     {% endif %}
                 </td></tr>
@@ -247,9 +261,10 @@
                         <input type="submit" value="&#8987;" />
                     </form>
                 </td><td class="hours">
+
                     {% if issue.total_hours or issue.estimated_hours %}
                     <span class="work node">
-                    {{ issue.total_hours }}{% if issue.estimated_hours %} / {{ issue.estimated_hours }}{% endif %} h
+                    {{ issue.total_hours|floatformat:2 }}{% if issue.estimated_hours %} / {{ issue.estimated_hours }}{% endif %} h
                     </span>
                     {% endif %}
                 </td></tr>

@@ -380,7 +380,6 @@ table#weekly-meeting .this-week {
 }
 #timer .info .label {
     vertical-align: top;
-    width: 7em;
     text-align: right;
 }
 #timer .info .box {
@@ -447,7 +446,14 @@ table#weekly-meeting .this-week {
     color: gray;
     font-size: 10px;
 }
+#timer #issues input {
+    font-size: 10px;
+}
 #timer .coder {
     background-color: silver;
     color: white;
+}
+#timer #estimate {
+    margin-bottom: 3em ;
+    text-align: center;
 }
