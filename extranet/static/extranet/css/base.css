@@ -444,10 +444,10 @@ table#weekly-meeting .this-week {
     padding-bottom: 1em;
     padding-right: 1em;
     color: gray;
-    font-size: 10px;
+    font-size: 11px;
 }
 #timer #issues input {
-    font-size: 10px;
+    font-size: 11px;
 }
 #timer .coder {
     background-color: silver;
