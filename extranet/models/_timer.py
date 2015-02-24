@@ -219,6 +219,20 @@ class Timer(models.Model):
         self.start_time = timezone.now()
         self.save()
 
+    def start_again(self, hours):
+        if self.start_time:
+            raise AlreadyStarted()
+
+        assert(hours.coder == self.coder)
+        self.project = hours.project
+        self.tags = hours.tags.all()
+        self.repository = hours.repository
+        self.issue = hours.issue
+        self.comment = hours.comment
+
+        self.start_time = timezone.now()
+        self.save()
+
     def stop(self):
         if self.end_time:
             raise AlreadyStopped()

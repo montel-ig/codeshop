@@ -6,11 +6,16 @@
 
     {% if timer.start_time %}
         <div class="info">
-
-        {% if timer.issue %}
-            <h3>{{ timer.issue.title }} [{{ timer.issue.get_distinct_name }}]</h3>
-        {% endif %}
-
+        <h3>
+            {% if timer.issue %}
+                {{ timer.issue.title }} [{{ timer.issue.get_distinct_name }}]
+            {% else %}
+                {{ timer.project.name }}
+                {% if timer.repository %}
+                [{{ timer.repository.get_distinct_name }}]
+                {% endif %}
+            {% endif %}
+        </h3>
         <table>
             <tr><td class="label">
                 Start:
@@ -202,14 +207,14 @@
                 </td><td>
                     {{ need.name }}
                 </td><td>
+                    {{ issue.title }}
+                </td><td>
                     <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
                         <input type="hidden" name="do" value="start" />
                         <input type="hidden" name="issue_id" value="{{ issue.id }}" />
                         {% csrf_token %}
-                        <input type="submit" value="Start" />
+                        <input type="submit" value="&#8987;" />
                     </form>
-                </td><td>
-                    {{ issue.title }}
                 </td></tr>
                 {% endfor %}
             {% endfor %}
@@ -220,14 +225,14 @@
                     {% endif %}
                 </td><td>
                 </td><td>
+                    {{ issue.title }}
+                </td><td>
                     <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
                         <input type="hidden" name="do" value="start" />
                         <input type="hidden" name="issue_id" value="{{ issue.id }}" />
                         {% csrf_token %}
-                        <input type="submit" value="Start" />
+                        <input type="submit" value="&#8987;" />
                     </form>
-                </td><td>
-                    {{ issue.title }}
                 </td></tr>
             {% endfor %}
         {% endfor %}

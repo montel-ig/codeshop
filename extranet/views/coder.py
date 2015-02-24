@@ -16,8 +16,9 @@ from isoweek import Week
 
 # extranet
 import forms
-from extranet.models import (Hours, CoderWeekly, CoderMonthly, Coder, Issue,
-                             Timer)
+from extranet.models import (
+    Hours, CoderWeekly, CoderMonthly, Coder, Issue, Timer
+)
 
 
 # === utils ===
@@ -77,7 +78,7 @@ def monthly_csv(request, monthly):
     response = render(request, 'extranet/coder_monthly.csv', d,
                       content_type='text/csv')
     fn = u'{}-{:02d}-hours-{}.csv'.format(monthly.year, monthly.month,
-                                      monthly.coder.user.username)
+                                          monthly.coder.user.username)
     response['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
     return response
 
@@ -152,6 +153,9 @@ def timer(request, coder):
         do = request.POST.get('do', None)
         if do == 'start':
             obj.start_issue(Issue.objects.get(pk=request.POST.get('issue_id')))
+        elif do == 'start_again':
+            hours = Hours.objects.get(pk=int(request.POST.get('hours_id')))
+            obj.start_again(hours)
         elif do == 'tag':
             timer.add_tag(request.POST.get('tag'))
         elif do == 'deltag':

@@ -90,7 +90,7 @@ class HoursManager(models.Manager):
         obj = Hours(
             project=project,
             date=datetime.datetime.strptime(date, self.DATE_FORMAT).date(),
-            amount=Decimal(hrs),
+            amount=Decimal(hrs or '0'),
             coder=coder.user,
             repository=repository,
             issue=issue,
