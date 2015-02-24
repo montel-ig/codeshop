@@ -152,7 +152,7 @@ td.navgroup {
 #report .issue .coder {
     text-align: right;
 }
-#report .issue .coder span , #timer .coder{
+#report .issue .coder span , #timer .coder {
     background-color: gray; 
     color: white;
 
@@ -220,11 +220,11 @@ td.navgroup {
 #needs .description {
     text-align: left;
 }
-#needs .hours {
+#needs .hours, #timer .hours {
     text-align: center;
     width: 3em;
 }
-#needs .node {
+#needs .node, #timer .node {
     white-space: nowrap;
     padding: 0.3em;
     border-radius: 5px;
@@ -237,7 +237,7 @@ td.navgroup {
     background-color: gray;
     color: white;
 }
-#needs .work, #needs .not-requested {
+#needs .work, #needs .not-requested, #timer .work {
     background-color: #ccc;
     color: white;
 }
@@ -445,6 +445,7 @@ table#weekly-meeting .this-week {
     padding-bottom: 1em;
     padding-right: 1em;
     color: gray;
+    font-size: 10px;
 }
 #timer .coder {
     background-color: silver;

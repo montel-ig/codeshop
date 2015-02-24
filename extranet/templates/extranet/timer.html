@@ -222,6 +222,12 @@
                         {% csrf_token %}
                         <input type="submit" value="&#8987;" />
                     </form>
+                </td><td class="hours">
+                    {% if issue.total_hours or issue.estimated_hours %}
+                    <span class="work node">
+                    {{ issue.total_hours|floatformat:1 }}{% if issue.estimated_hours %} / {{ issue.estimated_hours|floatformat:1 }}{% endif %} h
+                    </span>
+                    {% endif %}
                 </td></tr>
                 {% endfor %}
             {% endfor %}
@@ -240,6 +246,12 @@
                         {% csrf_token %}
                         <input type="submit" value="&#8987;" />
                     </form>
+                </td><td class="hours">
+                    {% if issue.total_hours or issue.estimated_hours %}
+                    <span class="work node">
+                    {{ issue.total_hours }}{% if issue.estimated_hours %} / {{ issue.estimated_hours }}{% endif %} h
+                    </span>
+                    {% endif %}
                 </td></tr>
             {% endfor %}
             {% for tag in timer.get_available_tags %}
@@ -258,6 +270,7 @@
                         <input type="submit" value="&#8987;" />
                     </form>
                 </td></tr>
+                </td><td>
             {% endfor %}
         {% endfor %}
         </table>
