@@ -137,6 +137,10 @@ class Timer(models.Model):
         return [x for x in HourTag.objects.all() if x not in selected]
 
     def save_values(self):
+        assert(
+            self.issue or
+            (self.project and self.tags.all() and self.comment)
+        )
         scsv = self.as_scsv()
         f = StringIO.StringIO(scsv)
         reader = csv.reader(f, delimiter=';')
@@ -233,6 +237,13 @@ class Timer(models.Model):
         self.start_time = timezone.now()
         self.save()
 
+    def start_non_ticketed(self, project, tag):
+        if self.start_time:
+            raise AlreadyStarted()
+        self.project = project
+        self.tags = [tag]
+        self.start_time = timezone.now()
+        self.save()
     def stop(self):
         if self.end_time:
             raise AlreadyStopped()

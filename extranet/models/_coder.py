@@ -13,7 +13,8 @@ from django.db import models
 # extranet
 
 # this package
-from ._issues import Issue, Project, Repository
+from ._needs import Project
+from ._issues import Issue, Repository
 from .utils import HoursReporter, Nameable
 
 

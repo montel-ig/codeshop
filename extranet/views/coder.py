@@ -17,7 +17,7 @@ from isoweek import Week
 # extranet
 import forms
 from extranet.models import (
-    Hours, CoderWeekly, CoderMonthly, Coder, Issue, Timer
+    Hours, CoderWeekly, CoderMonthly, Coder, Issue, Timer, Project, HourTag,
 )
 
 
@@ -153,6 +153,11 @@ def timer(request, coder):
         do = request.POST.get('do', None)
         if do == 'start':
             obj.start_issue(Issue.objects.get(pk=request.POST.get('issue_id')))
+        elif do == 'start_non_ticketed':
+            project = Project.objects.get(name=request.POST.get('project'))
+            assert(project in coder.projects)
+            tag = HourTag.objects.get(name=request.POST.get('tag'))
+            obj.start_non_ticketed(project, tag)
         elif do == 'start_again':
             hours = Hours.objects.get(pk=int(request.POST.get('hours_id')))
             obj.start_again(hours)

@@ -118,6 +118,13 @@
                         {% endfor %}
                     </div>
                 {% endif %}
+                {% if not timer.issue and not timer.comment  %}
+                    <p>
+                    <div class="tags alert">
+                            Please, add comment since there's no ticket attached to this timer entry:
+                            <p>
+                    </div>
+                {% endif %}
             </td><tr>
 
             <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
@@ -230,6 +237,23 @@
                     <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
                         <input type="hidden" name="do" value="start" />
                         <input type="hidden" name="issue_id" value="{{ issue.id }}" />
+                        {% csrf_token %}
+                        <input type="submit" value="&#8987;" />
+                    </form>
+                </td></tr>
+            {% endfor %}
+            {% for tag in timer.get_available_tags %}
+                <tr><td>
+                </td><td>
+                </td><td>
+                    <span class="tag project-name">
+                        {{ project.name }} / {{ tag }}
+                    </span>
+                </td><td>
+                    <form action="{% url 'extranet_timer' coder.user.username %}" method="post">
+                        <input type="hidden" name="do" value="start_non_ticketed" />
+                        <input type="hidden" name="project" value="{{ project.name }}" />
+                        <input type="hidden" name="tag" value="{{ tag }}" />
                         {% csrf_token %}
                         <input type="submit" value="&#8987;" />
                     </form>

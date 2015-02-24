@@ -18,7 +18,7 @@ Use the form below to upload your hours.
 <p>
 Allowed project names:
 <p>
-{% for project in coder.iter_projects %}<span class="tag project-name">{{ project.name }}</span>{% endfor %}
+{% for project in coder.projects %}<span class="tag project-name">{{ project.name }}</span>{% endfor %}
 
 {% if created_objs %}
   <p>CREATED:</p>
