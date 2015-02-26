@@ -20,8 +20,10 @@ def webhook(request, extra_path):
     my_digest = hmac.new(settings.GITHUB_WEBHOOKS_SECRET,
                          msg=request.body).hexdigest()
 
-    # TODO: should use hmac.compare_digest with Python > 2.7.7
-    assert(github_digest == my_digest)
+    if hasattr(hmac, 'compare_digest'):  # Python > 2.7.7
+        hmac.compare_digest(github_digest, my_digest)
+    else:
+        assert(github_digest == my_digest)
 
     repo = Repository.objects.try_to_get_by_name(
         json.loads(request.body)['repository']['full_name']
