@@ -1,4 +1,5 @@
 # python
+import hashlib
 import hmac
 import json
 
@@ -16,12 +17,15 @@ def webhook(request, extra_path):
     content_type = request.META.get('CONTENT_TYPE')
     assert(request.method == 'POST' and content_type == "application/json")
 
-    github_digest = request.META.get('HTTP_X_HUB_SIGNATURE')
+    type_, github_digest = request.META.get('HTTP_X_HUB_SIGNATURE').split('=')
+    assert(type_ == 'sha1')
+
     my_digest = hmac.new(settings.GITHUB_WEBHOOKS_SECRET,
-                         msg=request.body).hexdigest()
+                         request.body,
+                         hashlib.sha1).hexdigest()
 
     if hasattr(hmac, 'compare_digest'):  # Python > 2.7.7
-        hmac.compare_digest(github_digest, my_digest)
+        assert(hmac.compare_digest(github_digest, my_digest))
     else:
         assert(github_digest == my_digest)
 
