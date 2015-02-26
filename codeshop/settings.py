@@ -126,6 +126,7 @@ SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 # === GITHUB ===
 GITHUB_ACCESS_TOKEN = custom('GITHUB_ACCESS_TOKEN')
+GITHUB_WEBHOOKS_SECRET = custom('GITHUB_WEBHOOKS_SECRET')
 
 
 # === EMAIL ===

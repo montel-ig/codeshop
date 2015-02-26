@@ -6,6 +6,10 @@ urlpatterns = patterns(
     url(r'^login/$', 'extranet.views.login', name='extranet_login'),
     url(r'^$', 'extranet.views.home', name='extranet_home'),
 
+    # === github webhook ===
+    url(r'^github/webhook/(.*)/$', 'extranet.views.github.webhook',
+        name='extranet_github_webhook'),
+
     # === coder ===
     url(r'(.+)/timer/$', 'extranet.views.coder.timer',
         name='extranet_timer'),
@@ -29,4 +33,5 @@ urlpatterns = patterns(
         name='extranet_project_monthly'),
     url(r'^(.*)/needs/$', 'extranet.views.project.needs', name='extranet_project_needs'),
     url(r'^(.*)/$', 'extranet.views.project.home', name='extranet_project'),
+
 )
