@@ -5,6 +5,7 @@ import json
 
 # django
 from django.conf import settings
+from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 
 # extranet
@@ -33,3 +34,5 @@ def webhook(request, extra_path):
         json.loads(request.body)['repository']['full_name']
     )
     repo._sync()
+
+    return HttpResponse('ok')
