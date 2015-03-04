@@ -121,6 +121,8 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 SOCIAL_AUTH_ENABLED_BACKENDS = ('google')
+SOCIAL_AUTH_SESSION_EXPIRATION = custom('SOCIAL_AUTH_SESSION_EXPIRATION',
+                                        default=True)
 SESSION_SERIALIZER = 'django.contrib.sessions.serializers.PickleSerializer'
 
 
