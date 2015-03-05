@@ -3,13 +3,13 @@ from django.contrib.auth.admin import UserAdmin, GroupAdmin
 from django.contrib.auth.models import User, Group
 
 from models import (Project, Need, Organization, Repository, Issue, Hours,
-                    HourTag, Timer)
+                    HourTag, Timer, Month)
 
 
 # === patch & reload User/UserAdmin ===
 class TimerInline(admin.StackedInline):
-    model = Timer 
-    can_delete = True 
+    model = Timer
+    can_delete = True
     verbose_name_plural = 'timer'
 
 # Re-register UserAdmin
@@ -18,6 +18,7 @@ admin.site.register(User, UserAdmin)
 
 User.groups_string = lambda self: u', '.join(map(unicode, self.groups.all()))
 User.user_hours = lambda x: sum(h.amount for h in x.hours_set.all())
+
 
 class UserAdmin(UserAdmin):
     inlines = (TimerInline,)
@@ -111,7 +112,41 @@ class HoursAdmin(admin.ModelAdmin):
     list_display = (u'created_at', u'project', u'date', u'start_time',
                     u'amount', u'repository', u'issue', u'comment',
                     u'tags_string', u'ticket_info')
-    list_filter = (u'coder', u'project')
+    list_filter = (u'coder', u'project', u'coder_billing_month',
+                   u'project_billing_month')
     readonly_fields = (u'coder',  u'date', u'start_time', u'end_time',
                        u'amount', u'comment', u'input_data_json',
                        u'created_at', u'updated_at', 'as_scsv')
+
+    actions = ['set_default_coder_billing_month',
+               'set_default_project_billing_month',
+               'reset_coder_billing_month',
+               'reset_project_billing_month']
+
+    def set_default_coder_billing_month(self, request, queryset):
+        for hours in queryset:
+            hours.set_default_coder_billing_month()
+    set_default_coder_billing_month.short_description = \
+        "Set default coder billing month."
+
+    def set_default_project_billing_month(self, request, queryset):
+        for hours in queryset:
+            hours.set_default_project_billing_month()
+    set_default_project_billing_month.short_description = \
+        "Set default project billing month."
+
+    def reset_coder_billing_month(self, request, queryset):
+        queryset.update(coder_billing_month=None)
+    reset_coder_billing_month.short_description = \
+        "Reset coder billing month."
+
+    def reset_project_billing_month(self, request, queryset):
+        queryset.update(project_billing_month=None)
+    reset_project_billing_month.short_description = \
+        "Reset project billing month."
+
+
+@admin.register(Month)
+class MonthAdmin(admin.ModelAdmin):
+    list_display = (u'year', u'month', u'total_project_hours',
+                    u'total_coder_hours')

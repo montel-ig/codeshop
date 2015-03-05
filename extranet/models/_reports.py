@@ -11,7 +11,7 @@ from isoweek import Week
 
 # this package
 from utils import HoursReporter
-from _coder import Hours
+from _coder import Hours, Month
 
 
 # === mixins ===
@@ -25,6 +25,9 @@ class ReportMixin:
         raise NotImplementedError()
 
     def get_csv_link(self):
+        raise NotImplementedError()
+
+    def total_billable_hours(self):
         raise NotImplementedError()
 
 
@@ -50,6 +53,9 @@ class WeeklyMixin(TimeNavMixin):
     '''
     Requires the following instance attributes: `iso_week`
     '''
+    def get_month_obj(self):
+        d = self.iso_week.monday()
+        return Month.objects.get_or_create(year=d.year, month=d.month)[0]
 
     # === TimeNavMixin methods ===
 
@@ -82,6 +88,9 @@ class MonthlyMixin(TimeNavMixin):
             return self.year + 1, 1
         else:
             return self.year, self.month + 1
+
+    def get_month_obj(self):
+        return Month.objects.get_or_create(year=self.year, month=self.month)[0]
 
     # === TimeNavMixin methods ===
 
@@ -132,6 +141,16 @@ class CoderWeekly(CoderReport, WeeklyMixin):
         self.coder = coder
         self.iso_week = iso_week
 
+    # === ReportMixin methods ===
+    def total_billable_hours(self):
+        q = dict(
+            coder_billing_month=self.get_month_obj(),
+            date__gte=self.start_date(),
+            date__lte=self.end_date(),
+        )
+        return sum(hours.amount for hours in
+                   self.coder.user.hours_set.filter(**q))
+
     # === TimeNavMixin methods ===
 
     def prev_url(self):
@@ -165,6 +184,11 @@ class CoderMonthly(CoderReport, MonthlyMixin):
     def get_csv_link(self):
         return reverse('extranet_coder_monthly_csv',
                        args=(self.coder.user.username, self.year, self.month))
+
+    def total_billable_hours(self):
+        q = dict(coder_billing_month=self.get_month_obj())
+        return sum(hours.amount for hours in
+                   self.coder.user.hours_set.filter(**q))
 
     # === HoursReporter methods ===
 

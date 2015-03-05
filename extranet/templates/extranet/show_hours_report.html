@@ -38,6 +38,14 @@
       <td></td>
       {% if show_tracker_link_for %}<td></td>{% endif %}
     </tr>
+    {% if show_billable_hours %}
+    <tr class="header">
+      <td class="name">Billable:</td>
+      <td>{{ report.total_billable_hours }} h</td>
+      <td></td>
+      {% if show_tracker_link_for %}<td></td>{% endif %}
+    </tr>
+    {% endif %}
   {% endif %}
     {% for need, issues_with_amounts in report.iter_hours_by_needs_and_issues %}
       <tr class="need"><td colspan="3">

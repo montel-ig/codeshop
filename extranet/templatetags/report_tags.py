@@ -14,6 +14,7 @@ def show_hours_report(
     link_title_to_github=False,
     link_to_csv=False,
     show_tracker_link_for=None,  # coder
+    show_billable_hours=False,
 ):
     return {
         'report': report,
@@ -24,4 +25,5 @@ def show_hours_report(
         'link_title_to_github': link_title_to_github,
         'link_to_csv': link_to_csv,
         'show_tracker_link_for': show_tracker_link_for,
+        'show_billable_hours': show_billable_hours,
     }

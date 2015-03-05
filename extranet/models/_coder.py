@@ -55,6 +55,12 @@ class NoCoderProjects(Exception):
 
 # === managers ===
 
+class MonthManager(models.Manager):
+
+    def get_from_date(self, date):
+        return Month.objects.get_or_create(year=date.year, month=date.month)[0]
+
+
 class HoursManager(models.Manager):
 
     DATE_FORMAT = '%Y-%m-%d'
@@ -173,6 +179,22 @@ class HourTag(Nameable, HoursReporter):
             yield hours
 
 
+class Month(models.Model):
+    year = models.IntegerField()
+    month = models.IntegerField()
+
+    objects = MonthManager()
+
+    def total_coder_hours(self):
+        return sum(hours.amount for hours in self.billable_coder_hours.all())
+
+    def total_project_hours(self):
+        return sum(hours.amount for hours in self.billable_project_hours.all())
+
+    def __unicode__(self):
+        return u'{}-{:02d}'.format(self.year, self.month)
+
+
 class Hours(models.Model):
 
     objects = HoursManager()
@@ -198,6 +220,14 @@ class Hours(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     input_data_json = models.TextField(null=True, blank=True)  # sys info
+
+    # billing
+    coder_billing_month = models.ForeignKey(
+        Month, null=True, blank=True, related_name='billable_coder_hours'
+    )
+    project_billing_month = models.ForeignKey(
+        Month, null=True, blank=True, related_name='billable_project_hours'
+    )
 
     class Meta:
         verbose_name_plural = 'Hours'
@@ -243,6 +273,16 @@ class Hours(models.Model):
         except Hours.DoesNotExist:
             obj = None
         return obj is not None
+
+    def set_default_coder_billing_month(self):
+        if not self.coder_billing_month:
+            self.coder_billing_month = Month.objects.get_from_date(self.date)
+            self.save()
+
+    def set_default_project_billing_month(self):
+        if not self.project_billing_month:
+            self.project_billing_month = Month.objects.get_from_date(self.date)
+            self.save()
 
 
 class Coder:
