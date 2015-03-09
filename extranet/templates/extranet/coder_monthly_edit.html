@@ -1,0 +1,90 @@
+{% extends "extranet/base.html" %}
+{% load report_tags %}
+{% block content %}
+
+<table id="edit-hours">
+    <tr><th>
+            project
+        </th><th>
+            date
+        </th><th>
+            start time
+        </th><th>
+            end time
+        </th><th>
+            hours
+        </th><th>
+            tags
+        </th><th>
+            repository
+        </th><th>
+            issue number
+        </th><th>
+            comment
+        </th><th>
+            billing month
+        </th><th>
+            actions
+    </th></tr>
+    {% for row in coder_monthly.iter_hours %}
+    <tr><td>
+            {{ row.project.name }}
+    </td><td>
+            {{ row.date|date:'Y-m-d' }}
+    </td><td>
+            {{ row.start_time|time:'H:i' }}
+    </td><td>
+            {{ row.end_time|time:'H:i' }}
+    </td><td>
+            {{ row.amount }}
+    </td><td>
+            {{ row.tags_string}}
+    </td><td>
+            {{ row.repository.get_distinct_name }}
+    </td><td>
+            {{ row.issue.number }}
+    </td><td class="comment">
+            {{ row.comment }}
+    </td><td>
+            {{ row.coder_billing_month|default_if_none:'' }}
+    </td><td>
+        {% if not selected or selected == row %}
+            {% if not row.coder_billing_month and not row.project_billing_month %}
+                <form action="{% url 'extranet_coder_monthly_edit_row' coder_monthly.coder.user.username coder_monthly.year coder_monthly.month %}" method="{% if selected == row %}POST{% else %}GET{% endif %}">
+                    <input type="hidden" name="action" value="delete" />
+                    <input type="hidden" name="row_id" value="{{ row.id }}" />
+                    {% csrf_token %}
+                    <input type="submit" value="{% if selected == row %}Delete!{% else %}Delete?{% endif %}" />
+                </form>
+            {% endif %}
+        {% endif %}
+    </td></tr>
+    {% endfor %}
+</table>
+
+{% endblock content %}
+
+{% block navpath %}
+
+    <a href="{% url 'extranet_home' %}">{{ SITE_NAME }}</a>
+    &#x27a3;
+    {{ coder_monthly.coder }}
+    &#x27a3;
+    <a href="{% url 'extranet_coder_monthly' coder_monthly.coder.user.username coder_monthly.year coder_monthly.month %}">{{ coder_monthly.yyyy_mm }}</a>
+    &#x27a3;
+    {% if selected %}
+        <a href="{% url 'extranet_coder_monthly_edit' coder_monthly.coder.user.username coder_monthly.year coder_monthly.month %}">Edit</a>
+        &#x27a3;
+        <span class="currentpage">Row</span>
+    {% else %}
+        <span class="currentpage">Edit</span>
+    {% endif %}
+
+{% endblock navpath %}
+
+{% block page_title %}
+
+    {{ coder_monthly.yyyy_mm }}
+    {{ coder_monthly.coder }}
+
+{% endblock page_title %}

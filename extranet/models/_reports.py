@@ -27,6 +27,9 @@ class ReportMixin:
     def get_csv_link(self):
         raise NotImplementedError()
 
+    def get_edit_link(self):
+        raise NotImplementedError()
+
     def total_billable_hours(self):
         raise NotImplementedError()
 
@@ -183,6 +186,10 @@ class CoderMonthly(CoderReport, MonthlyMixin):
     # === ReportMixin methods ===
     def get_csv_link(self):
         return reverse('extranet_coder_monthly_csv',
+                       args=(self.coder.user.username, self.year, self.month))
+
+    def get_edit_link(self):
+        return reverse('extranet_coder_monthly_edit',
                        args=(self.coder.user.username, self.year, self.month))
 
     def total_billable_hours(self):

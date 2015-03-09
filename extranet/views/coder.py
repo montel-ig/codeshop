@@ -71,6 +71,40 @@ def monthly(request, monthly):
 @login_required
 @get_coder
 @get_monthly_obj
+def monthly_edit(request, monthly):
+    d = dict(
+        coder_monthly=monthly,
+    )
+    return render(request, 'extranet/coder_monthly_edit.html', d)
+
+
+@login_required
+@get_coder
+@get_monthly_obj
+def monthly_edit_row(request, monthly):
+    confirmed = (request.method == 'POST')
+    d = request.POST if confirmed else request.GET
+    obj = Hours.objects.get(id=d['row_id'])
+
+    if d.get('action') == 'delete':
+        assert(not obj.coder_billing_month)
+        assert(not obj.project_billing_month)
+        assert(obj in set(monthly.iter_hours()))
+        if confirmed:
+            obj.delete()
+            return redirect(reverse('extranet_coder_monthly_edit',
+                                    args=[monthly.coder.user.username,
+                                          monthly.year, monthly.month]))
+    d = dict(
+        selected=obj,
+        coder_monthly=monthly,
+    )
+    return render(request, 'extranet/coder_monthly_edit.html', d)
+
+
+@login_required
+@get_coder
+@get_monthly_obj
 def monthly_csv(request, monthly):
     d = dict(
         coder_monthly=monthly,

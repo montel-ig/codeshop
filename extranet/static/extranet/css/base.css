@@ -457,3 +457,17 @@ table#weekly-meeting .this-week {
     margin-bottom: 3em ;
     text-align: center;
 }
+table#edit-hours td, table#edit-hours th {
+    background: #eee;
+    padding: 4px;
+    line-height: 1.6em;
+    font-size: 10px;
+    vertical-align: top;
+    white-space: nowrap;
+}
+table#edit-hours td.comment {
+    white-space: normal !important;
+}
+table#edit-hours input {
+    font-size: 10px;
+}
