@@ -18,6 +18,7 @@ from isoweek import Week
 import forms
 from extranet.models import (
     Hours, CoderWeekly, CoderMonthly, Coder, Issue, Timer, Project, HourTag,
+    AlreadyStarted
 )
 
 
@@ -194,7 +195,12 @@ def timer(request, coder):
             obj.start_non_ticketed(project, tag)
         elif do == 'start_again':
             hours = Hours.objects.get(pk=int(request.POST.get('hours_id')))
-            obj.start_again(hours)
+            try:
+                obj.start_again(hours)
+            except AlreadyStarted:
+                # by default, don't let new timer starts to override an already
+                # running timer instance
+                pass
         elif do == 'tag':
             timer.add_tag(request.POST.get('tag'))
         elif do == 'deltag':
