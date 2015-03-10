@@ -198,7 +198,7 @@ def timer(request, coder):
             try:
                 obj.start_again(hours)
             except AlreadyStarted:
-                # by default, don't let new timer starts to override an already
+                # by default, don't let new timer starts override an already
                 # running timer instance
                 pass
         elif do == 'tag':
