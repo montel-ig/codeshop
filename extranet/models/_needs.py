@@ -89,4 +89,9 @@ class Need(models.Model, HoursReporter):
             repo = self.project.default_repository
             if repo:
                 gh_repo = _github().get_repo(repo.get_distinct_name())
-                gh_repo.create_issue(self.name, body=self.description)
+                gh_issue = gh_repo.create_issue(self.name,
+                                                body=self.description)
+                repo._sync()
+                issue = repo.try_to_get_issue(gh_issue.number)
+                issue.need = self
+                issue.save()
