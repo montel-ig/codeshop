@@ -4,13 +4,18 @@ from datetime import timedelta
 from decimal import Decimal
 
 # django
-from django.db import models
 from django.conf import settings
+from django.db import models
 from django.core.exceptions import ValidationError
 from django.utils import timezone
 
 # 3rd party
 import pytz
+from github import Github
+
+
+def _github():
+    return Github(settings.GITHUB_ACCESS_TOKEN)
 
 
 def round_datetime(dt, resolution=60 * 15):

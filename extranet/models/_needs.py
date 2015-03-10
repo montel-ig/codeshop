@@ -4,12 +4,13 @@ from django.core.urlresolvers import reverse
 from django.db import models
 
 # this package
-from .utils import HoursReporter, Nameable
+from .utils import HoursReporter, Nameable, _github
 
 
 class Project(Nameable, HoursReporter):
     customer_team = models.ForeignKey(Group, related_name='code_projects')
     coder_team = models.ForeignKey(Group, related_name='customer_projects')
+    default_repository = models.ForeignKey('Repository', null=True, blank=True)
 
     def get_absolute_url(self):
         return reverse('extranet_project', args=[self.name])
@@ -82,3 +83,10 @@ class Need(models.Model, HoursReporter):
             if val:
                 started = min(started, val) if started else val
         return started
+
+    def create_default_issue(self):
+        if not self.issue_set.all():
+            repo = self.project.default_repository
+            if repo:
+                gh_repo = _github().get_repo(repo.get_distinct_name())
+                gh_repo.create_issue(self.name, body=self.description)

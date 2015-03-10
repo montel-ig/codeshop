@@ -101,6 +101,12 @@ class NeedAdmin(admin.ModelAdmin):
                     u'estimate_finished_at', u'created_at', u'total_hours')
     list_filter = (u'project', u'is_estimate_requested')
 
+    actions = ['create_default_issue']
+
+    def create_default_issue(self, request, queryset):
+        for need in queryset:
+            need.create_default_issue()
+    create_default_issue.short_description = "Create default issue"
 
 @admin.register(HourTag)
 class HourTagAdmin(admin.ModelAdmin):

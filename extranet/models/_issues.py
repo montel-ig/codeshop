@@ -2,24 +2,15 @@
 from datetime import timedelta
 
 # django
-from django.conf import settings
 from django.db import models
 from django.utils import timezone
 
-# 3rd party
-from github import Github
-
 # this package
 from ._needs import Project, Need
-from .utils import HoursReporter
+from .utils import HoursReporter, _github
 
 
 # === utils ===
-
-def _github():
-    return Github(settings.GITHUB_ACCESS_TOKEN)
-
-
 class Syncable(models.Model):
     synced_at = models.DateTimeField(null=True, blank=True)
 
