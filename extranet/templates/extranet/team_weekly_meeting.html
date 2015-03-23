@@ -24,6 +24,7 @@
         <td class="week">
 
             <table id="report">
+
             {% for need, issues in lwpr.project.iter_needs_with_open_issues %}
 
               <tr class="need"><td colspan="3">
@@ -54,6 +55,34 @@
 
               {% endfor %}
             {% endfor %}
+
+
+            <tr class="need"><td colspan="3">
+                Other open issues
+            </td></tr>
+            {% for issue in lwpr.project.iter_open_issues_with_no_related_need %}
+                <tr class="issue issue-{% if issue.closed_at %}closed{% else %}open{% endif %}">
+                  <td class="hours">
+                      {% if issue.estimated_hours %}
+                          {{ issue.estimated_hours }}
+                      {% else %}
+                          ?
+                      {% endif %}
+                      h
+                  </td>
+                  <td class="title">
+                      <a href="{{ issue.html_url }}" target="_new">{{ issue.title }}</a>
+                  </td>
+                  <td class="coder">
+                    {% if issue.assignee_login %}
+                      <span>
+                        {{ issue.assignee_login }}
+                      </span>
+                    {% endif %}
+                  </td>
+                </tr>
+            {% endfor %}
+
             </table>
 
         </td></tr>
