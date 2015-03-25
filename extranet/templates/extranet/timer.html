@@ -8,7 +8,7 @@
         <div class="info">
         <h3>
             {% if timer.issue %}
-                {{ timer.issue.title }} [{{ timer.issue.get_distinct_name }}]
+                {{ timer.issue.title }} <a class="issue" target="_new" href="{{ timer.issue.html_url }}">[{{ timer.issue.get_distinct_name }}]</a>
             {% else %}
                 {{ timer.project.name }}
                 {% if timer.repository %}

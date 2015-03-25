@@ -370,6 +370,10 @@ table#weekly-meeting .this-week {
     border-top: 3px solid #ff7f0e;
     border-left: 3px solid #ff7f0e;
 }
+#timer .info a.issue {
+    text-decoration: none;
+    color: steelblue;
+}
 #timer .info h3 {
     line-height: 1em;
 }
@@ -471,3 +475,4 @@ table#edit-hours td.comment {
 table#edit-hours input {
     font-size: 10px;
 }
+
