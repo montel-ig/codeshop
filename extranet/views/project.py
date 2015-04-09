@@ -8,7 +8,7 @@ from isoweek import Week
 
 # extranet
 from extranet.models import (Project, ProjectReport, ProjectMonthly,
-                             ProjectWeekly)
+                             ProjectWeekly, Need)
 
 
 # === utils ===
@@ -78,3 +78,13 @@ def needs(request, project):
         project_needs=project.need_set.all().order_by('-created_at'),
     )
     return render(request, 'extranet/project_needs.html', d)
+
+
+@login_required
+@get_project
+def need(request, project, need_id):
+    d = dict(
+        project_report=ProjectReport(project),
+        need=Need.objects.get(project=project, pk=int(need_id)),
+    )
+    return render(request, 'extranet/project_need.html', d)

@@ -63,7 +63,7 @@ class Timer(models.Model):
                                  null=True)
 
     # special, at least one required
-    tags = models.ManyToManyField(HourTag, blank=True, null=True)
+    tags = models.ManyToManyField(HourTag, blank=True)
 
     # optional for Hours
     repository = models.ForeignKey(Repository, null=True, blank=True)

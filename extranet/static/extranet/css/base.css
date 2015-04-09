@@ -220,6 +220,15 @@ td.navgroup {
 #needs .description {
     text-align: left;
 }
+.description {
+    margin: 1em; 
+    margin-left: 2em; 
+    margin-bottom: 2em;
+    border: 1px solid silver;
+    padding: 1em;
+    background-color: gray;
+    color: white;
+}
 #needs .hours, #timer .hours {
     text-align: center;
     width: 3em;

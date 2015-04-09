@@ -1,7 +1,8 @@
-django>=1.7.6
+django>=1.8
 django-extensions
 PyGithub
 pyyaml
 django-social-auth
 isoweek
 pytz
+django-markdown-deux

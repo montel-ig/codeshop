@@ -1,10 +1,16 @@
 {% extends "extranet/base.html" %}
+{% load markdown_deux_tags %}
+
 {% block content %}
+
+    <h3>{{ need.name }}</h3>
+
+    <div class="description">
+        {{ need.description|markdown }}
+    </div>
 
     <table id="needs">
         <tr><th>
-            Name
-        </th><th>
             Created on 
         </th><th>
             Total estimated hours
@@ -19,10 +25,8 @@
         </th><th>
             Total hours
         </th></tr>
-        {% for need in project_needs %}
-        <tr><td class="name">
-            <a href="{% url 'extranet_project_need' project_report.project.name need.pk %}">{{ need.name }}</a>
-        </td><td>
+
+        <tr><td>
             <span class="created node">
                 {{ need.created_at|date:'Y-m-d' }}
             </span>
@@ -75,7 +79,7 @@
             <span class="work node">{{ need.total_hours }} h</span>
           {% endif %}
         </td></tr>
-        {% endfor %}
+
     </table>
 
 {% endblock content %}
@@ -87,7 +91,9 @@
     &#x27a3;
     <a href="{% url 'extranet_project' project_report.project.name %}">{{ project_report.project.name }}</a>
     &#x27a3;
-    <span class="currentpage">Manage needs</span>
+    <a href="{% url 'extranet_project_needs' project_report.project.name %}">Manage needs</a>
+    &#x27a3;
+    <span class="currentpage">{{ need.name }}</span>
 
 {% endblock navpath %}
 

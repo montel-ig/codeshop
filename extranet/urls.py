@@ -37,6 +37,7 @@ urlpatterns = patterns(
     url(r'^(.*)/(\d+)/(\d+)/$', 'extranet.views.project.monthly',
         name='extranet_project_monthly'),
     url(r'^(.*)/needs/$', 'extranet.views.project.needs', name='extranet_project_needs'),
+    url(r'^(.*)/need/(.*)$', 'extranet.views.project.need', name='extranet_project_need'),
     url(r'^(.*)/$', 'extranet.views.project.home', name='extranet_project'),
 
 )
