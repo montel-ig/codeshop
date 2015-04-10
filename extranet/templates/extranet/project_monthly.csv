@@ -1,0 +1,2 @@
+{% for category, description, total_hours in project_monthly.iter_hour_summaries %}{{ category }};{{ description }};{{ total_hours }};
+{% endfor %}

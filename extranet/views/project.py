@@ -88,3 +88,18 @@ def need(request, project, need_id):
         need=Need.objects.get(project=project, pk=int(need_id)),
     )
     return render(request, 'extranet/project_need.html', d)
+
+
+@login_required
+@get_project
+@get_monthly_obj
+def monthly_csv(request, monthly):
+    d = dict(
+        project_monthly=monthly,
+    )
+    response = render(request, 'extranet/project_monthly.csv', d,
+                      content_type='text/csv')
+    fn = u'{}-{:02d}-invoice-summary-{}.csv'.format(monthly.year, monthly.month,
+                                          monthly.project.name)
+    response['Content-Disposition'] = u'attachment; filename="{}"'.format(fn)
+    return response

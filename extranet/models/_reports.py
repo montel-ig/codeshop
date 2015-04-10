@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+
 # python
 import calendar
+from collections import defaultdict
 from datetime import date
+from decimal import Decimal
 
 # django
 from django.core.urlresolvers import reverse
@@ -306,8 +310,48 @@ class ProjectMonthly(ProjectReport, MonthlyMixin):
                                           project=self.project):
             yield hours
 
+    def iter_hour_summaries(self):
+        total = 0
+
+        # headers
+        yield 'CATEGORY', 'DESCRIPTION', 'HOURS'
+        yield '', '', ''
+
+        # summarize and yield hours with issues
+        d = defaultdict(Decimal)
+        for need, issues_w_amounts in self.iter_hours_by_needs_and_issues():
+            for issue, amount, coders in issues_w_amounts:
+                d[need.name if need else issue.title] += amount
+                total += amount
+        for description, total_hours in d.items():
+            yield 'Development work', description, total_hours
+        yield '', '', ''
+
+        # summarize and yield hours with no related issues
+        d = defaultdict(Decimal)
+        for tags, hours_list in self.iter_hours_with_no_related_issues():
+            key = 'Work hours tagged w/ {}'.format(tags.upper())
+            for hours in hours_list:
+                d[key] += hours.amount
+                total += hours.amount
+        for description, total_hours in d.items():
+            yield [
+                'Maintenance, administration, meetings, and other work',
+                description,
+                total_hours,
+            ]
+
+        # yield total
+        yield '', '', ''
+        yield 'TOTAL', '', total
+
     def __unicode__(self):
         return u'{}-{:02d}'.format(self.year, self.month)
+
+    # === ReportMixin methods ===
+    def get_csv_link(self):
+        return reverse('extranet_project_monthly_csv',
+                       args=(self.project.name, self.year, self.month))
 
     # === MonthlyMixin/TimeNavMixin methods ===
 
