@@ -153,7 +153,7 @@ def upload_hours_as_csv(request, coder):
                             valid_objs.append(obj)
 
             # create objects
-            if not is_preview and not failed_rows:
+            if not is_preview:
 
                 for row in _valid_rows:
                     obj, created = Hours.objects.csv_get_or_create(row,
