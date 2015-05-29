@@ -103,7 +103,7 @@ STATIC_ROOT = custom('STATIC_ROOT')
 
 # === social auth tweaks ===
 AUTHENTICATION_BACKENDS = (
-    'social_auth.backends.google.GoogleOAuth2Backend',
+    #'social_auth.backends.google.GoogleOAuth2Backend',
     'django.contrib.auth.backends.ModelBackend',
 )
 
