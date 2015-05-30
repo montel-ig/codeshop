@@ -319,7 +319,9 @@ class ProjectMonthly(ProjectReport, MonthlyMixin):
 
         # summarize and yield hours with issues
         d = defaultdict(Decimal)
-        for need, issues_w_amounts in self.iter_hours_by_needs_and_issues():
+        for (
+                need, issues_w_amounts, total_sum
+        ) in self.iter_hours_by_needs_and_issues():
             for issue, amount, coders in issues_w_amounts:
                 d[need.name if need else issue.title] += amount
                 total += amount
@@ -329,7 +331,9 @@ class ProjectMonthly(ProjectReport, MonthlyMixin):
 
         # summarize and yield hours with no related issues
         d = defaultdict(Decimal)
-        for tags, hours_list in self.iter_hours_with_no_related_issues():
+        for (
+                tags, hours_list, total_sum
+        ) in self.iter_hours_with_no_related_issues():
             key = 'Work hours tagged w/ {}'.format(tags.upper())
             for hours in hours_list:
                 d[key] += hours.amount

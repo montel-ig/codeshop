@@ -107,6 +107,9 @@ td.navgroup {
     text-align: right;
     font-style: normal;
 }
+#report .header .summary {
+    background-color: #ff7f0e;
+}
 #report .issue .hours, #report .total .hours {
     width: 4em;
     text-align: right;

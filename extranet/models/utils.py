@@ -52,7 +52,11 @@ class HoursReporter(object):
 
         for need in keys:
             issues_with_amounts_and_coders = totals_and_coders_by_needs[need]
-            yield need, issues_with_amounts_and_coders
+            yield (
+                need,
+                issues_with_amounts_and_coders,
+                sum(amount for _, amount, _ in issues_with_amounts_and_coders)
+            )
 
     def iter_hours_with_no_related_issues(self):
         data = defaultdict(list)
@@ -60,7 +64,7 @@ class HoursReporter(object):
             if not hours.issue:
                 data[hours.tags_string()].append(hours)
         for tags, hours in data.items():
-            yield tags, hours
+            yield tags, hours, sum(x.amount for x in hours)
 
     def total_hours(self):
         return sum(hours.amount for hours in self.iter_hours())

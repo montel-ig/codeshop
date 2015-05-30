@@ -28,12 +28,35 @@
       {% if show_tracker_link_for %}<td></td>{% endif %}
     </tr>
     <tr class="header">
-      <td class="name">Hours:</td>
-      <td>{{ report.total_hours }} h
-        {% if link_to_csv %}
-          &nbsp;
-          <a href="{{ report.get_csv_link }}">[export as csv]</a>
-        {% endif %}
+      <td class="name summary"></td>
+      <td>
+        <table style="width: 100%;">
+          <tr class="total"><td colspan="3" class="underline"></td></tr>
+          <tr class="total"><td colspan="3" class="header underline">Summary</td></tr>
+          {% for need, issues_with_amounts, total_sum in report.iter_hours_by_needs_and_issues %}
+              <tr class="issue">
+                <td class="hours">{{ total_sum }} h</td>
+                <td class="title">
+                  {% if need %}{{ need }}{% else %}<i>---</i>{% endif %}
+                </td>
+              </tr>
+          {% endfor %}
+          {% for tags, hours_list, total_sum in report.iter_hours_with_no_related_issues %}
+              <tr class="issue">
+                <td class="hours">{{ total_sum }} h</td>
+                <td class="title">
+                  {% if tags %}{{ tags }}{% else %}<i>---</i>{% endif %}
+                </td>
+              </tr>
+          {% endfor %}
+          <tr class="total"><td colspan="3" class="underline"></td></tr>
+          <tr class="issue"><td class="hours">{{ report.total_hours }} h</td><td colspan="2" class="title">TOTAL</td></tr>
+          {% if link_to_csv %}
+            <tr><td colspan="3" style="text-align: right">
+            <a href="{{ report.get_csv_link }}">[export as csv]</a>
+          </tr>
+          {% endif %}
+        </table>
       </td>
       <td></td>
       {% if show_tracker_link_for %}<td></td>{% endif %}
@@ -52,6 +75,10 @@
     </tr>
     {% endif %}
   {% endif %}
+
+    <tr><td colspan="3" class="spacer"></td></tr>
+    <tr><td colspan="3" class="spacer"></td></tr>
+
     {% for need, issues_with_amounts in report.iter_hours_by_needs_and_issues %}
       <tr class="need"><td colspan="3">
           {% if need %}<b>{{ need }}</b>{% else %}<i>---</i>{% endif %}
@@ -89,7 +116,7 @@
       {% endfor %}
     {% endfor %}
 
-    {% for tags, hours_list in report.iter_hours_with_no_related_issues %}
+    {% for tags, hours_list, total_sum in report.iter_hours_with_no_related_issues %}
       <tr class="need"><td colspan="3">
           {% if tags %}<b>{{ tags }}</b>{% else %}<i>---</i>{% endif %}
       </td></tr>
@@ -123,10 +150,8 @@
       {% endfor %}
     {% endfor %}
     <tr><td colspan="3" class="spacer"></td></tr>
-    <tr class="total"><td colspan="3" class="header underline">Total hours</td></tr>
-    <tr class="total"><td colspan="3" class="underline"></td></tr>
-    <tr class="total"><td class="hours">{{ report.total_hours }} h</td> <td colspan="2"></td></tr>
-
+    <tr><td colspan="3" class="spacer"></td></tr>
+    <tr><td colspan="3" class="spacer"></td></tr>
   </table>
 
 {% endif %}
