@@ -129,7 +129,7 @@ def upload_hours_as_csv(request, coder):
         form = forms.HoursUploadForm(request.POST, request.FILES)
 
         if form.is_valid():
-
+            skip_failed_rows = form.cleaned_data['skip_failed_rows']
             is_preview = 'preview' in request.POST
 
             # parse rows
@@ -153,7 +153,7 @@ def upload_hours_as_csv(request, coder):
                             valid_objs.append(obj)
 
             # create objects
-            if not is_preview and not failed_rows:
+            if not is_preview and (not failed_rows or skip_failed_rows):
 
                 for row in _valid_rows:
                     obj, created = Hours.objects.csv_get_or_create(row,
