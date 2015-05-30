@@ -8,4 +8,4 @@ DELIMITERS = [(x, x) for x in [';', ',']] + [('\t', 'tab')]
 class HoursUploadForm(forms.Form):
     file = forms.FileField()
     delimiter = forms.ChoiceField(choices=DELIMITERS)
-    ignore_faulty_rows = forms.BooleanField(required=False)
+    skip_failed_rows = forms.BooleanField(required=False)
